@@ -1,6 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import { products } from '../data';
+import { addToCartPure } from '../utilities';
 
 const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
   <div>
@@ -50,16 +51,10 @@ const Cart = ({ items }): JSX.Element => (
   </div>
 );
 
-const addToCart = (cart, item): object => {
-  return {
-    'Jungle Art Print Unframed A4': 1,
-  };
-};
-
 const Home = (): JSX.Element => {
   const [cart, setCart] = useState({});
   const addToThisCart = (item): void => {
-    const newCart = addToCart(cart, item);
+    const newCart = addToCartPure(cart, item);
     setCart(newCart);
   };
 
