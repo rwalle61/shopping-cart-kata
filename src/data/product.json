@@ -1,0 +1,188 @@
+[
+  {
+    "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/93e15616/5d70e2f93d51575d590000b7.jpeg",
+    "brand": {
+      "id": "2000000000000020178",
+      "name": "Michael Belhadi",
+      "slug": "michael-belhadi"
+    },
+    "title": "Jungle Art Print Unframed",
+    "id": "2000001000413620178",
+    "skus": [
+      {
+        "description": "Jungle Art Print Unframed A4",
+        "id": "2100011000413620178",
+        "price": 30,
+        "stock": 10
+      },
+      {
+        "description": "Jungle Art Print Unframed A3",
+        "id": "2100021000413620178",
+        "price": 40,
+        "stock": 4
+      },
+      {
+        "description": "Jungle Art Print Unframed A2",
+        "id": "2100031000413620178",
+        "price": 50,
+        "stock": 10
+      },
+      {
+        "description": "Jungle Art Print Unframed A1",
+        "id": "2100041000413620178",
+        "price": 60,
+        "stock": 10
+      },
+      {
+        "description": "Jungle Art Print Unframed A0",
+        "id": "2100051000413620178",
+        "price": 120,
+        "stock": 10
+      }
+    ]
+  },
+  {
+    "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/e01f72b5/5d4a85d754d1780084000030.jpeg",
+    "brand": {
+      "id": "2000000000000020177",
+      "name": "David Sparshott",
+      "slug": "david-sparshott"
+    },
+    "title": "Unframed Col Du Glandon Art Print",
+    "id": "2000001000410220177",
+    "skus": [
+      {
+        "description": "Unframed Col Du Glandon Art Print - A4",
+        "id": "2100011000410220177",
+        "price": 60,
+        "stock": 10
+      },
+      {
+        "description": "Unframed Col Du Glandon Art Print - A3",
+        "id": "2100021000410220177",
+        "price": 80,
+        "stock": 10
+      },
+      {
+        "description": "Unframed Col Du Glandon Art Print - A2",
+        "id": "2100031000410220177",
+        "price": 100,
+        "stock": 10
+      },
+      {
+        "description": "Unframed Col Du Glandon Art Print - A1",
+        "id": "2100041000410220177",
+        "price": 150,
+        "stock": 10
+      },
+      {
+        "description": "Unframed Col Du Glandon Art Print - A0",
+        "id": "2100051000410220177",
+        "price": 200,
+        "stock": 10
+      }
+    ]
+  },
+  {
+    "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/93e15616/5d70e2f93d51575d590000db.jpeg",
+    "brand": {
+      "id": "2000000000000020178",
+      "name": "Michael Belhadi",
+      "slug": "michael-belhadi"
+    },
+    "title": "Mexico Art Print Unframed",
+    "id": "2000001000414520178",
+    "skus": [
+      {
+        "description": "Mexico Art Print Unframed A4",
+        "id": "2100011000414520178",
+        "price": 30,
+        "stock": 10
+      },
+      {
+        "description": "Mexico Art Print Unframed A3",
+        "id": "2100021000414520178",
+        "price": 40,
+        "stock": 12
+      },
+      {
+        "description": "Mexico Art Print Unframed A2",
+        "id": "2100031000414520178",
+        "price": 50,
+        "stock": 10
+      },
+      {
+        "description": "Mexico Art Print Unframed A1",
+        "id": "2100041000414520178",
+        "price": 60,
+        "stock": 1
+      },
+      {
+        "description": "Mexico Art Print Unframed A0",
+        "id": "2100051000414520178",
+        "price": 120,
+        "stock": 10
+      }
+    ]
+  },
+  {
+    "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/86b4edd1/5da74776f9b6b137860000c7.jpeg",
+    "brand": {
+      "id": "2000000000000020183",
+      "name": "Boris Draschoff",
+      "slug": "boris-draschoff"
+    },
+    "title": "Black Orchidee Art Print Unframed",
+    "id": "2000001000410820183",
+    "skus": [
+      {
+        "description": "Black Orchidee Art Print Unframed A4",
+        "id": "2100011000410820183",
+        "price": 30,
+        "stock": 0
+      },
+      {
+        "description": "Black Orchidee Art Print Unframed A3",
+        "id": "2100021000410820183",
+        "price": 40,
+        "stock": 10
+      },
+      {
+        "description": "Black Orchidee Art Print Unframed A2",
+        "id": "2100031000410820183",
+        "price": 50,
+        "stock": 10
+      },
+      {
+        "description": "Black Orchidee Art Print Unframed A1",
+        "id": "2100041000410820183",
+        "price": 60,
+        "stock": 10
+      },
+      {
+        "description": "Black Orchidee Art Print Unframed A0",
+        "id": "2100051000410820183",
+        "price": 120,
+        "stock": 10
+      }
+    ]
+  },
+  {
+    "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/616d37cf/5dde3085c70d3e2fa700005f.jpg",
+    "brand": {
+      "id": "2000000000000020163",
+      "name": "Sternzeit ",
+      "slug": "sternzeit"
+    },
+    "title": "Lemon Cube Chair Copper",
+    "id": "2000001000511120163",
+    "skus": [
+      {
+        "description": "Lemon Cube Chair Copper",
+        "id": "2100051000511120163",
+        "price": 234.24,
+        "stock": 4
+      }
+    ]
+  }
+]
