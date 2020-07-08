@@ -38,9 +38,10 @@ describe('Home page', () => {
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
-    it('renders the titles and brands of the (5) default products', () => {
+    it('renders the titles and brands of the (5) default products in the catalogue', () => {
+      const catalogue = screen.getByText('Products').parentElement;
       defaultProducts.forEach((product, i) => {
-        const titleElement = screen.getAllByText(product)[0];
+        const titleElement = within(catalogue).getAllByText(product)[0];
         expect(titleElement).toBeInTheDocument();
         const brandElement = within(titleElement.parentElement).getByText(
           defaultBrands[i],
