@@ -5,8 +5,11 @@ const Product = ({ title, brand, variants }): JSX.Element => (
     <div>{title}</div>
     <div>{brand}</div>
     <div>
-      {variants.map((variant) => (
-        <div key={variant.description}>{variant.description}</div>
+      {variants.map(({ description, price }) => (
+        <div key={description}>
+          <div>{description}</div>
+          <div>{price}</div>
+        </div>
       ))}
     </div>
   </div>

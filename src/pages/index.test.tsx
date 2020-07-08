@@ -22,6 +22,7 @@ const productWithMultipleVariants = 'Jungle Art Print Unframed';
 const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
   (size) => `${productWithMultipleVariants} ${size}`,
 );
+const productVariantPrices = [30, 40, 50, 60, 120].map((price) => `${price}`);
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -49,14 +50,18 @@ describe('Home page', () => {
         expect(brand).toBeInTheDocument();
       });
     });
-    it('renders the descriptions of product variants', () => {
+    it('renders the descriptions and prices of product variants', () => {
       const productTitle = screen.getByText(productWithMultipleVariants);
       expect(productTitle).toBeInTheDocument();
-      productVariants.forEach((variant) => {
-        const variantElement = within(productTitle.parentElement).getByText(
+      productVariants.forEach((variant, i) => {
+        const variantDescription = within(productTitle.parentElement).getByText(
           variant,
         );
-        expect(variantElement).toBeInTheDocument();
+        expect(variantDescription).toBeInTheDocument();
+        const variantPrice = within(productTitle.parentElement).getByText(
+          productVariantPrices[i],
+        );
+        expect(variantPrice).toBeInTheDocument();
       });
     });
   });

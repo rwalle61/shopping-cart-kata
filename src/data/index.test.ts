@@ -11,18 +11,23 @@ describe('data', () => {
             "variants": Array [
               Object {
                 "description": "Jungle Art Print Unframed A4",
+                "price": 30,
               },
               Object {
                 "description": "Jungle Art Print Unframed A3",
+                "price": 40,
               },
               Object {
                 "description": "Jungle Art Print Unframed A2",
+                "price": 50,
               },
               Object {
                 "description": "Jungle Art Print Unframed A1",
+                "price": 60,
               },
               Object {
                 "description": "Jungle Art Print Unframed A0",
+                "price": 120,
               },
             ],
           },
@@ -32,18 +37,23 @@ describe('data', () => {
             "variants": Array [
               Object {
                 "description": "Unframed Col Du Glandon Art Print - A4",
+                "price": 60,
               },
               Object {
                 "description": "Unframed Col Du Glandon Art Print - A3",
+                "price": 80,
               },
               Object {
                 "description": "Unframed Col Du Glandon Art Print - A2",
+                "price": 100,
               },
               Object {
                 "description": "Unframed Col Du Glandon Art Print - A1",
+                "price": 150,
               },
               Object {
                 "description": "Unframed Col Du Glandon Art Print - A0",
+                "price": 200,
               },
             ],
           },
@@ -53,18 +63,23 @@ describe('data', () => {
             "variants": Array [
               Object {
                 "description": "Mexico Art Print Unframed A4",
+                "price": 30,
               },
               Object {
                 "description": "Mexico Art Print Unframed A3",
+                "price": 40,
               },
               Object {
                 "description": "Mexico Art Print Unframed A2",
+                "price": 50,
               },
               Object {
                 "description": "Mexico Art Print Unframed A1",
+                "price": 60,
               },
               Object {
                 "description": "Mexico Art Print Unframed A0",
+                "price": 120,
               },
             ],
           },
@@ -74,18 +89,23 @@ describe('data', () => {
             "variants": Array [
               Object {
                 "description": "Black Orchidee Art Print Unframed A4",
+                "price": 30,
               },
               Object {
                 "description": "Black Orchidee Art Print Unframed A3",
+                "price": 40,
               },
               Object {
                 "description": "Black Orchidee Art Print Unframed A2",
+                "price": 50,
               },
               Object {
                 "description": "Black Orchidee Art Print Unframed A1",
+                "price": 60,
               },
               Object {
                 "description": "Black Orchidee Art Print Unframed A0",
+                "price": 120,
               },
             ],
           },
@@ -95,6 +115,7 @@ describe('data', () => {
             "variants": Array [
               Object {
                 "description": "Lemon Cube Chair Copper",
+                "price": 234.24,
               },
             ],
           },
