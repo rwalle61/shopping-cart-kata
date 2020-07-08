@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { render, screen, within } from '@testing-library/react';
 import Home from '.';
 
-const defaultProducts = [
+const catalogueProducts = [
   'Jungle Art Print Unframed',
   'Unframed Col Du Glandon Art Print',
   'Mexico Art Print Unframed',
@@ -28,8 +28,8 @@ describe('Home page', () => {
     render(<Home />);
   });
   describe('when app starts', () => {
-    it('renders the "Products" title', () => {
-      expect(screen.getByText('Products')).toBeInTheDocument();
+    it('renders the "Catalogue" title', () => {
+      expect(screen.getByText('Catalogue')).toBeInTheDocument();
     });
     it('renders the "Cart" title', () => {
       expect(screen.getByText('Cart')).toBeInTheDocument();
@@ -39,24 +39,24 @@ describe('Home page', () => {
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
     it('renders the titles and brands of the (5) default products in the catalogue', () => {
-      const catalogue = screen.getByText('Products').parentElement;
-      defaultProducts.forEach((product, i) => {
-        const titleElement = within(catalogue).getAllByText(product)[0];
-        expect(titleElement).toBeInTheDocument();
-        const brandElement = within(titleElement.parentElement).getByText(
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      catalogueProducts.forEach((product, i) => {
+        const productTitle = within(catalogue).getAllByText(product)[0];
+        expect(productTitle).toBeInTheDocument();
+        const brand = within(productTitle.parentElement).getByText(
           defaultBrands[i],
         );
-        expect(brandElement).toBeInTheDocument();
+        expect(brand).toBeInTheDocument();
       });
     });
     it('renders the descriptions of product variants', () => {
-      const titleElement = screen.getByText(productWithMultipleVariants);
-      expect(titleElement).toBeInTheDocument();
+      const productTitle = screen.getByText(productWithMultipleVariants);
+      expect(productTitle).toBeInTheDocument();
       productVariants.forEach((variant) => {
-        const sizeElement = within(titleElement.parentElement).getByText(
+        const variantElement = within(productTitle.parentElement).getByText(
           variant,
         );
-        expect(sizeElement).toBeInTheDocument();
+        expect(variantElement).toBeInTheDocument();
       });
     });
   });

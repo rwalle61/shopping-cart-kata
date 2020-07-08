@@ -14,7 +14,7 @@ const Product = ({ title, brand, variants }): JSX.Element => (
 
 const Catalogue = (): JSX.Element => (
   <div>
-    <div>Products</div>
+    <div>Catalogue</div>
     {products.map(({ title, brand, variants }) => (
       <Product key={title} title={title} brand={brand} variants={variants} />
     ))}
