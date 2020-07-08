@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import Home from '.';
 
 const defaultProducts = [
@@ -8,6 +8,14 @@ const defaultProducts = [
   'Mexico Art Print Unframed',
   'Black Orchidee Art Print Unframed',
   'Lemon Cube Chair Copper',
+];
+
+const defaultBrands = [
+  'Michael Belhadi',
+  'David Sparshott',
+  'Michael Belhadi',
+  'Boris Draschoff',
+  'Sternzeit',
 ];
 
 describe('Home page', () => {
@@ -25,9 +33,14 @@ describe('Home page', () => {
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
-    it('renders the names of the (5) default items', () => {
-      defaultProducts.forEach((product) => {
-        expect(screen.getByText(product)).toBeInTheDocument();
+    it('renders the titles and brands of the (5) default items', () => {
+      defaultProducts.forEach((product, i) => {
+        const titleElement = screen.getByText(product);
+        expect(titleElement).toBeInTheDocument();
+        const brandElement = within(titleElement.parentElement).getByText(
+          defaultBrands[i],
+        );
+        expect(brandElement).toBeInTheDocument();
       });
     });
   });

@@ -1,5 +1,8 @@
-import products from './product.json';
+import productsJson from './product.json';
 
-export const productNames = products.map(product => product.title);
+export const products = productsJson.map(product => ({
+  title: product.title,
+  brand: product.brand.name,
+}));
 
-export default products
+export default productsJson
