@@ -18,10 +18,10 @@ const defaultBrands = [
   'Sternzeit',
 ];
 
-const artProduct = 'Jungle Art Print Unframed';
-const artProductVariants = ['A4', 'A3', 'A2', 'A1', 'A0'];
-
-const productWithoutVariants = 'Lemon Cube Chair Copper';
+const productWithMultipleVariants = 'Jungle Art Print Unframed';
+const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
+  (size) => `${productWithMultipleVariants} ${size}`,
+);
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('Home page', () => {
     });
     it('renders the titles and brands of the (5) default products', () => {
       defaultProducts.forEach((product, i) => {
-        const titleElement = screen.getByText(product);
+        const titleElement = screen.getAllByText(product)[0];
         expect(titleElement).toBeInTheDocument();
         const brandElement = within(titleElement.parentElement).getByText(
           defaultBrands[i],
@@ -48,23 +48,14 @@ describe('Home page', () => {
         expect(brandElement).toBeInTheDocument();
       });
     });
-    it('renders the variants of an art product', () => {
-      const titleElement = screen.getByText(artProduct);
+    it('renders the descriptions of product variants', () => {
+      const titleElement = screen.getByText(productWithMultipleVariants);
       expect(titleElement).toBeInTheDocument();
-      artProductVariants.forEach((size) => {
-        const sizeElement = within(titleElement.parentElement).getByText(size);
-        expect(sizeElement).toBeInTheDocument();
-      });
-    });
-    it('does not render variants of a product without variants', () => {
-      const titleElement = screen.getByText(productWithoutVariants);
-      expect(titleElement).toBeInTheDocument();
-
-      artProductVariants.forEach((size) => {
-        const sizeElement = within(titleElement.parentElement).queryByText(
-          size,
+      productVariants.forEach((variant) => {
+        const sizeElement = within(titleElement.parentElement).getByText(
+          variant,
         );
-        expect(sizeElement).toBeNull();
+        expect(sizeElement).toBeInTheDocument();
       });
     });
   });
