@@ -18,6 +18,11 @@ const defaultBrands = [
   'Sternzeit',
 ];
 
+const artProduct = 'Jungle Art Print Unframed';
+const artProductVariants = ['A4', 'A3', 'A2', 'A1', 'A0'];
+
+const productWithoutVariants = 'Lemon Cube Chair Copper';
+
 describe('Home page', () => {
   beforeEach(() => {
     render(<Home />);
@@ -33,7 +38,7 @@ describe('Home page', () => {
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
-    it('renders the titles and brands of the (5) default items', () => {
+    it('renders the titles and brands of the (5) default products', () => {
       defaultProducts.forEach((product, i) => {
         const titleElement = screen.getByText(product);
         expect(titleElement).toBeInTheDocument();
@@ -41,6 +46,25 @@ describe('Home page', () => {
           defaultBrands[i],
         );
         expect(brandElement).toBeInTheDocument();
+      });
+    });
+    it('renders the variants of an art product', () => {
+      const titleElement = screen.getByText(artProduct);
+      expect(titleElement).toBeInTheDocument();
+      artProductVariants.forEach((size) => {
+        const sizeElement = within(titleElement.parentElement).getByText(size);
+        expect(sizeElement).toBeInTheDocument();
+      });
+    });
+    it('does not render variants of a product without variants', () => {
+      const titleElement = screen.getByText(productWithoutVariants);
+      expect(titleElement).toBeInTheDocument();
+
+      artProductVariants.forEach((size) => {
+        const sizeElement = within(titleElement.parentElement).queryByText(
+          size,
+        );
+        expect(sizeElement).toBeNull();
       });
     });
   });
