@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
+import userEvent from '@testing-library/user-event';
 import { render, screen, within } from '@testing-library/react';
 import Home from '.';
 
@@ -22,6 +23,7 @@ const productWithMultipleVariants = 'Jungle Art Print Unframed';
 const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
   (size) => `${productWithMultipleVariants} ${size}`,
 );
+const productVariant = productVariants[0];
 const productVariantPrices = [30, 40, 50, 60, 120].map((price) => `${price}`);
 
 describe('Home page', () => {
@@ -50,7 +52,7 @@ describe('Home page', () => {
         expect(brand).toBeInTheDocument();
       });
     });
-    it('renders the descriptions and prices of product variants', () => {
+    it('renders the product variants with descriptions, prices, and buttons to add them to cart', () => {
       const productTitle = screen.getByText(productWithMultipleVariants);
       expect(productTitle).toBeInTheDocument();
       productVariants.forEach((variant, i) => {
@@ -58,11 +60,29 @@ describe('Home page', () => {
           variant,
         );
         expect(variantDescription).toBeInTheDocument();
-        const variantPrice = within(productTitle.parentElement).getByText(
+        const variantElement = variantDescription.parentElement;
+        const variantPrice = within(variantElement).getByText(
           productVariantPrices[i],
         );
         expect(variantPrice).toBeInTheDocument();
+        const button = within(variantElement).getByRole('button');
+        expect(button).toHaveTextContent('Add to Cart');
       });
+    });
+  });
+  describe('when user adds an item to the cart', () => {
+    it('renders that item in the cart', () => {
+      const cart = screen.getByText('Cart').parentElement;
+      expect(within(cart).queryByText(productVariant)).toBeNull();
+
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(productVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+
+      userEvent.click(catalogueItemButton);
+
+      expect(within(cart).getByText(productVariant)).toBeInTheDocument();
     });
   });
 });
