@@ -82,7 +82,21 @@ describe('Home page', () => {
 
       userEvent.click(catalogueItemButton);
 
-      expect(within(cart).getByText(productVariant)).toBeInTheDocument();
+      expect(within(cart).getByText(`1 ${productVariant}`)).toBeInTheDocument();
+    });
+    it('renders multiples of that item in the cart', () => {
+      const cart = screen.getByText('Cart').parentElement;
+      expect(within(cart).queryByText(productVariant)).toBeNull();
+
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(productVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+
+      userEvent.click(catalogueItemButton);
+      userEvent.click(catalogueItemButton);
+
+      expect(within(cart).getByText(`2 ${productVariant}`)).toBeInTheDocument();
     });
   });
 });

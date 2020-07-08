@@ -40,9 +40,9 @@ const Cart = ({ items }): JSX.Element => (
   <div>
     <div>Cart</div>
     <div>
-      {Object.keys(items).map((description) => (
+      {Object.entries(items).map(([description, quantity]) => (
         <div key={description}>
-          <div>{description}</div>
+          <div>{`${quantity} ${description}`}</div>
         </div>
       ))}
     </div>
