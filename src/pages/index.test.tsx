@@ -188,4 +188,27 @@ describe('Home page', () => {
       });
     });
   });
+  describe('when user empties the cart', () => {
+    it('removes all items and resets the cart price to 0', () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(productVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      userEvent.click(catalogueItemButton);
+
+      const cart = screen.getByText('Cart').parentElement;
+      const emptyCartButton = within(cart)
+        .getByText('Empty Cart')
+        .closest('button');
+      userEvent.click(emptyCartButton);
+
+      const newCart = screen.getByText('Cart').parentElement;
+      const newCartItemTitle = within(newCart).queryByText(
+        new RegExp(productVariant),
+      );
+      expect(newCartItemTitle).toBeNull();
+      expect(screen.getByText('Total:')).toBeInTheDocument();
+      expect(screen.getByText('£0.00')).toBeInTheDocument();
+    });
+  });
 });

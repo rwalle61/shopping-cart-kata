@@ -51,9 +51,10 @@ const CartItem = ({
   </div>
 );
 
-const Cart = ({ items, addToCart, removeFromCart }): JSX.Element => (
+const Cart = ({ items, addToCart, removeFromCart, emptyCart }): JSX.Element => (
   <div>
     <div>Cart</div>
+    <Button onClick={emptyCart}>Empty Cart</Button>
     <div>
       {Object.entries(items).map(([description, quantity]) => (
         <CartItem
@@ -80,6 +81,9 @@ const Home = (): JSX.Element => {
     const newCart = removeFromCartPure(cart, item);
     setCart(newCart);
   };
+  const emptyCart = (): void => {
+    setCart({});
+  };
 
   return (
     <div>
@@ -88,6 +92,7 @@ const Home = (): JSX.Element => {
         items={cart}
         addToCart={addToThisCart}
         removeFromCart={removeFromThisCart}
+        emptyCart={emptyCart}
       />
     </div>
   );
