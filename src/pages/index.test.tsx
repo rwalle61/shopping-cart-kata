@@ -3,33 +3,19 @@ import userEvent from '@testing-library/user-event';
 import { render, screen, within } from '@testing-library/react';
 import Home from '.';
 
-const catalogueProducts = [
-  'Jungle Art Print Unframed',
-  'Unframed Col Du Glandon Art Print',
-  'Mexico Art Print Unframed',
-  'Black Orchidee Art Print Unframed',
-  'Lemon Cube Chair Copper',
-];
+const productVariant = 'Jungle Art Print Unframed A4';
 
-const defaultBrands = [
-  'Michael Belhadi',
-  'David Sparshott',
-  'Michael Belhadi',
-  'Boris Draschoff',
-  'Sternzeit',
-];
+const getCatalogueItemButton = (matcher): HTMLElement => {
+  const catalogue = screen.getByText('Catalogue').parentElement;
+  const catalogueItem = within(catalogue).getByText(matcher).parentElement;
+  return within(catalogueItem).getByRole('button');
+};
 
-const productWithMultipleVariants = catalogueProducts[0];
-const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
-  (size) => `${productWithMultipleVariants} ${size}`,
-);
-const productVariantPrices = [30, 40, 50, 60, 120].map((price) => `${price}`);
-
-const productVariant = productVariants[0];
-const productBrand = defaultBrands[0];
-const outOfStockVariant = 'Black Orchidee Art Print Unframed A4';
-const lowStockVariant = 'Jungle Art Print Unframed A3';
-const lowStockVariantStock = 4;
+const getCartItem = (matcher): HTMLElement => {
+  const cart = screen.getByText('Cart').parentElement;
+  const cartItemTitle = within(cart).getByText(matcher);
+  return cartItemTitle.parentElement;
+};
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -47,7 +33,22 @@ describe('Home page', () => {
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
     it('renders the default products in the catalogue', () => {
+      const catalogueProducts = [
+        'Jungle Art Print Unframed',
+        'Unframed Col Du Glandon Art Print',
+        'Mexico Art Print Unframed',
+        'Black Orchidee Art Print Unframed',
+        'Lemon Cube Chair Copper',
+      ];
+      const defaultBrands = [
+        'Michael Belhadi',
+        'David Sparshott',
+        'Michael Belhadi',
+        'Boris Draschoff',
+        'Sternzeit',
+      ];
       const catalogue = screen.getByText('Catalogue').parentElement;
+
       catalogueProducts.forEach((product, i) => {
         const productTitle = within(catalogue).getAllByText(product)[0];
         expect(productTitle).toBeInTheDocument();
@@ -58,6 +59,14 @@ describe('Home page', () => {
       });
     });
     it('renders the product variants with descriptions, prices, and buttons to add them to cart', () => {
+      const productWithMultipleVariants = 'Jungle Art Print Unframed';
+      const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
+        (size) => `${productWithMultipleVariants} ${size}`,
+      );
+      const productVariantPrices = [30, 40, 50, 60, 120].map(
+        (price) => `${price}`,
+      );
+
       const productTitle = screen.getByText(productWithMultipleVariants);
       expect(productTitle).toBeInTheDocument();
       productVariants.forEach((variant, i) => {
@@ -77,10 +86,8 @@ describe('Home page', () => {
   });
   describe('when user adds an item to the cart', () => {
     it('renders that item in the cart with details and buttons', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(productVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const productBrand = 'Michael Belhadi';
+      const catalogueItemButton = getCatalogueItemButton(productVariant);
 
       userEvent.click(catalogueItemButton);
 
@@ -96,10 +103,7 @@ describe('Home page', () => {
       expect(button2).toHaveTextContent('+');
     });
     it('renders multiples of that item in the cart', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(productVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(productVariant);
 
       userEvent.click(catalogueItemButton);
       userEvent.click(catalogueItemButton);
@@ -108,10 +112,7 @@ describe('Home page', () => {
       expect(within(cart).getByText(`2 ${productVariant}`)).toBeInTheDocument();
     });
     it('updates the cart price', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(productVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(productVariant);
 
       userEvent.click(catalogueItemButton);
 
@@ -119,15 +120,10 @@ describe('Home page', () => {
       expect(screen.getByText('£30.00')).toBeInTheDocument();
     });
     it('renders a button to add more of an item to the cart', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(productVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(productVariant);
       userEvent.click(catalogueItemButton);
 
-      const cart = screen.getByText('Cart').parentElement;
-      const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
-      const cartItem = cartItemTitle.parentElement;
+      const cartItem = getCartItem(`1 ${productVariant}`);
       const incrementButton = within(cartItem).getByText('+').closest('button');
       userEvent.click(incrementButton);
 
@@ -141,15 +137,10 @@ describe('Home page', () => {
   describe('when user removes an item from the cart', () => {
     describe('when the cart contains just 1 of the item', () => {
       it('removes the item from the cart and updates the cart price', () => {
-        const catalogue = screen.getByText('Catalogue').parentElement;
-        const catalogueItem = within(catalogue).getByText(productVariant)
-          .parentElement;
-        const catalogueItemButton = within(catalogueItem).getByRole('button');
+        const catalogueItemButton = getCatalogueItemButton(productVariant);
         userEvent.click(catalogueItemButton);
 
-        const cart = screen.getByText('Cart').parentElement;
-        const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
-        const cartItem = cartItemTitle.parentElement;
+        const cartItem = getCartItem(`1 ${productVariant}`);
         const decrementButton = within(cartItem)
           .getByText('-')
           .closest('button');
@@ -166,16 +157,11 @@ describe('Home page', () => {
     });
     describe('when the cart contains multiples of the item', () => {
       it('keeps the item in the cart, updates the item quantity and cart price', () => {
-        const catalogue = screen.getByText('Catalogue').parentElement;
-        const catalogueItem = within(catalogue).getByText(productVariant)
-          .parentElement;
-        const catalogueItemButton = within(catalogueItem).getByRole('button');
+        const catalogueItemButton = getCatalogueItemButton(productVariant);
         userEvent.click(catalogueItemButton);
         userEvent.click(catalogueItemButton);
 
-        const cart = screen.getByText('Cart').parentElement;
-        const cartItemTitle = within(cart).getByText(`2 ${productVariant}`);
-        const cartItem = cartItemTitle.parentElement;
+        const cartItem = getCartItem(`2 ${productVariant}`);
         const decrementButton = within(cartItem)
           .getByText('-')
           .closest('button');
@@ -193,10 +179,7 @@ describe('Home page', () => {
   });
   describe('when user empties the cart', () => {
     it('removes all items and resets the cart price to 0', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(productVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(productVariant);
       userEvent.click(catalogueItemButton);
 
       const cart = screen.getByText('Cart').parentElement;
@@ -215,6 +198,9 @@ describe('Home page', () => {
     });
   });
   describe('when an item runs out of stock', () => {
+    const outOfStockVariant = 'Black Orchidee Art Print Unframed A4';
+    const lowStockVariant = 'Jungle Art Print Unframed A3';
+    const lowStockVariantStock = 4;
     it('disables an item\'s "Add to Cart" button if it is already out of stock', () => {
       const catalogue = screen.getByText('Catalogue').parentElement;
       const catalogueItem = within(catalogue).getByText(outOfStockVariant)
@@ -225,69 +211,42 @@ describe('Home page', () => {
       expect(catalogueItemButton).toBeDisabled();
     });
     it('disables an item\'s "Add to Cart" button when it runs out of stock', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(lowStockVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(lowStockVariant);
 
       for (let i = 0; i < lowStockVariantStock; i += 1) {
         userEvent.click(catalogueItemButton);
       }
 
-      const newCatalogue = screen.getByText('Catalogue').parentElement;
-      const newCatalogueItem = within(newCatalogue).getByText(lowStockVariant)
-        .parentElement;
-      const newCatalogueItemButton = within(newCatalogueItem).getByRole(
-        'button',
-      );
+      const newCatalogueItemButton = getCatalogueItemButton(lowStockVariant);
       expect(newCatalogueItemButton).toHaveTextContent('Out of Stock');
       expect(newCatalogueItemButton).toBeDisabled();
     });
     it('disables an item\'s "Increment" button when it runs out of stock', () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(lowStockVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(lowStockVariant);
 
       for (let i = 0; i < lowStockVariantStock; i += 1) {
         userEvent.click(catalogueItemButton);
       }
 
-      const cart = screen.getByText('Cart').parentElement;
-      const cartItemTitle = within(cart).getByText(new RegExp(lowStockVariant));
-      const cartItem = cartItemTitle.parentElement;
+      const cartItem = getCartItem(new RegExp(lowStockVariant));
       const incrementButton = within(cartItem).getByText('+').closest('button');
       expect(incrementButton).toBeDisabled();
     });
     it("re-enables the item's Add buttons when it is back in stock", () => {
-      const catalogue = screen.getByText('Catalogue').parentElement;
-      const catalogueItem = within(catalogue).getByText(lowStockVariant)
-        .parentElement;
-      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      const catalogueItemButton = getCatalogueItemButton(lowStockVariant);
       for (let i = 0; i < lowStockVariantStock; i += 1) {
         userEvent.click(catalogueItemButton);
       }
 
-      const cart = screen.getByText('Cart').parentElement;
-      const cartItemTitle = within(cart).getByText(new RegExp(lowStockVariant));
-      const cartItem = cartItemTitle.parentElement;
+      const cartItem = getCartItem(new RegExp(lowStockVariant));
       const decrementButton = within(cartItem).getByText('-').closest('button');
       userEvent.click(decrementButton);
 
-      const newCatalogue = screen.getByText('Catalogue').parentElement;
-      const newCatalogueItem = within(newCatalogue).getByText(lowStockVariant)
-        .parentElement;
-      const newCatalogueItemButton = within(newCatalogueItem).getByRole(
-        'button',
-      );
+      const newCatalogueItemButton = getCatalogueItemButton(lowStockVariant);
       expect(newCatalogueItemButton).toHaveTextContent('Add to Cart');
       expect(newCatalogueItemButton).toBeEnabled();
 
-      const newCart = screen.getByText('Cart').parentElement;
-      const newCartItemTitle = within(newCart).getByText(
-        new RegExp(lowStockVariant),
-      );
-      const newCartItem = newCartItemTitle.parentElement;
+      const newCartItem = getCartItem(new RegExp(lowStockVariant));
       const incrementButton = within(newCartItem)
         .getByText('+')
         .closest('button');
