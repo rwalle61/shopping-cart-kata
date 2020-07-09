@@ -73,7 +73,7 @@ describe('Home page', () => {
     });
   });
   describe('when user adds an item to the cart', () => {
-    it('renders that item in the cart', () => {
+    it('renders that item in the cart with details and buttons', () => {
       const catalogue = screen.getByText('Catalogue').parentElement;
       const catalogueItem = within(catalogue).getByText(productVariant)
         .parentElement;
@@ -114,6 +114,23 @@ describe('Home page', () => {
 
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£30.00')).toBeInTheDocument();
+    });
+    it('renders a button to add more of an item to the cart', () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(productVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      userEvent.click(catalogueItemButton);
+
+      const cart = screen.getByText('Cart').parentElement;
+      const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
+      const cartItem = cartItemTitle.parentElement;
+      const incrementButton = within(cartItem).getByText('+').closest('button');
+      userEvent.click(incrementButton);
+
+      const newCart = screen.getByText('Cart').parentElement;
+      const newCartItemTitle = within(newCart).getByText(`2 ${productVariant}`);
+      expect(newCartItemTitle).toBeInTheDocument();
     });
   });
 });

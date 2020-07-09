@@ -37,16 +37,16 @@ const Catalogue = ({ addToCart }): JSX.Element => (
   </div>
 );
 
-const CartItem = ({ description, quantity }): JSX.Element => (
+const CartItem = ({ description, quantity, addToCart }): JSX.Element => (
   <div>
     <div>{`${quantity} ${description}`}</div>
     <div>{getBrand(description)}</div>
     <Button onClick={(): void => null}>-</Button>
-    <Button onClick={(): void => null}>+</Button>
+    <Button onClick={(): void => addToCart(description)}>+</Button>
   </div>
 );
 
-const Cart = ({ items }): JSX.Element => (
+const Cart = ({ items, addToCart }): JSX.Element => (
   <div>
     <div>Cart</div>
     <div>
@@ -55,6 +55,7 @@ const Cart = ({ items }): JSX.Element => (
           key={description}
           description={description}
           quantity={quantity}
+          addToCart={addToCart}
         />
       ))}
     </div>
@@ -73,7 +74,7 @@ const Home = (): JSX.Element => {
   return (
     <div>
       <Catalogue addToCart={addToThisCart} />
-      <Cart items={cart} />
+      <Cart items={cart} addToCart={addToThisCart} />
     </div>
   );
 };
