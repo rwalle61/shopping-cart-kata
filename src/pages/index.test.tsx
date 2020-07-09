@@ -80,7 +80,13 @@ describe('Home page', () => {
       userEvent.click(catalogueItemButton);
 
       const cart = screen.getByText('Cart').parentElement;
-      expect(within(cart).getByText(`1 ${productVariant}`)).toBeInTheDocument();
+      const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
+      expect(cartItemTitle).toBeInTheDocument();
+
+      const cartItem = cartItemTitle.parentElement;
+      const [button1, button2] = within(cartItem).getAllByRole('button');
+      expect(button1).toHaveTextContent('-');
+      expect(button2).toHaveTextContent('+');
     });
     it('renders multiples of that item in the cart', () => {
       const catalogue = screen.getByText('Catalogue').parentElement;

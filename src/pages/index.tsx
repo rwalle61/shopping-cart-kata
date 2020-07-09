@@ -37,14 +37,24 @@ const Catalogue = ({ addToCart }): JSX.Element => (
   </div>
 );
 
+const CartItem = ({ description, quantity }): JSX.Element => (
+  <div>
+    <div>{`${quantity} ${description}`}</div>
+    <Button onClick={(): void => null}>-</Button>
+    <Button onClick={(): void => null}>+</Button>
+  </div>
+);
+
 const Cart = ({ items }): JSX.Element => (
   <div>
     <div>Cart</div>
     <div>
       {Object.entries(items).map(([description, quantity]) => (
-        <div key={description}>
-          <div>{`${quantity} ${description}`}</div>
-        </div>
+        <CartItem
+          key={description}
+          description={description}
+          quantity={quantity}
+        />
       ))}
     </div>
     <div>Total:</div>
