@@ -37,7 +37,7 @@ describe('Home page', () => {
     it('renders the "Cart" title', () => {
       expect(screen.getByText('Cart')).toBeInTheDocument();
     });
-    it('renders the default basket price (£0.00)', () => {
+    it('renders the default cart price (£0.00)', () => {
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
@@ -72,9 +72,6 @@ describe('Home page', () => {
   });
   describe('when user adds an item to the cart', () => {
     it('renders that item in the cart', () => {
-      const cart = screen.getByText('Cart').parentElement;
-      expect(within(cart).queryByText(productVariant)).toBeNull();
-
       const catalogue = screen.getByText('Catalogue').parentElement;
       const catalogueItem = within(catalogue).getByText(productVariant)
         .parentElement;
@@ -82,12 +79,10 @@ describe('Home page', () => {
 
       userEvent.click(catalogueItemButton);
 
+      const cart = screen.getByText('Cart').parentElement;
       expect(within(cart).getByText(`1 ${productVariant}`)).toBeInTheDocument();
     });
     it('renders multiples of that item in the cart', () => {
-      const cart = screen.getByText('Cart').parentElement;
-      expect(within(cart).queryByText(productVariant)).toBeNull();
-
       const catalogue = screen.getByText('Catalogue').parentElement;
       const catalogueItem = within(catalogue).getByText(productVariant)
         .parentElement;
@@ -96,7 +91,19 @@ describe('Home page', () => {
       userEvent.click(catalogueItemButton);
       userEvent.click(catalogueItemButton);
 
+      const cart = screen.getByText('Cart').parentElement;
       expect(within(cart).getByText(`2 ${productVariant}`)).toBeInTheDocument();
+    });
+    it('updates the cart price', () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(productVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+
+      userEvent.click(catalogueItemButton);
+
+      expect(screen.getByText('Total:')).toBeInTheDocument();
+      expect(screen.getByText('£30.00')).toBeInTheDocument();
     });
   });
 });

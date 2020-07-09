@@ -2,6 +2,7 @@ import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import { products } from '../data';
 import { addToCartPure } from '../utilities';
+import { getCartPrice } from '../utilities/cart.utils';
 
 const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
   <div>
@@ -47,7 +48,7 @@ const Cart = ({ items }): JSX.Element => (
       ))}
     </div>
     <div>Total:</div>
-    <div>£0.00</div>
+    <div>{`£${getCartPrice(items)}`}</div>
   </div>
 );
 

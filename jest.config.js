@@ -22,4 +22,4 @@ module.exports = {
   //     statements: 97,
   //   },
   // },
-}
+};

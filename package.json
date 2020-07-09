@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
-    "format": "prettier --write **/*.{js,ts,tsx}",
+    "format": "prettier --write .",
     "lint": "eslint --fix . --ext ts --ext tsx --ext js ",
     "tidy": "yarn format && yarn lint && yarn type-check",
     "test": "jest --watch",
@@ -19,14 +19,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
       "pre-push": "yarn run test:ci"
     }
-  },
-  "lint-staged": {
-    "*.@(ts|tsx)": [
-      "yarn tidy"
-    ]
   },
   "dependencies": {
     "@testing-library/user-event": "^12.0.11",
@@ -61,7 +55,6 @@
     "husky": "^4.2.3",
     "jest": "^25.2.3",
     "jest-watch-typeahead": "^0.5.0",
-    "lint-staged": "^10.0.10",
     "prettier": "^2.0.2",
     "typescript": "^3.8.3"
   }
