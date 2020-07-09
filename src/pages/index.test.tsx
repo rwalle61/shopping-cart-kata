@@ -161,7 +161,7 @@ describe('Home page', () => {
         expect(screen.getByText('£0.00')).toBeInTheDocument();
       });
     });
-    describe.skip('when the cart contains multiples of the item', () => {
+    describe('when the cart contains multiples of the item', () => {
       it('keeps the item in the cart, updates the item quantity and cart price', () => {
         const catalogue = screen.getByText('Catalogue').parentElement;
         const catalogueItem = within(catalogue).getByText(productVariant)

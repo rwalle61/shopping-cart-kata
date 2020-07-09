@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import { products, getBrand } from '../data';
-import { addToCartPure } from '../utilities';
+import { addToCartPure, removeFromCartPure } from '../utilities';
 import { getCartPrice } from '../utilities/cart.utils';
 
 const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
@@ -76,8 +76,9 @@ const Home = (): JSX.Element => {
     const newCart = addToCartPure(cart, item);
     setCart(newCart);
   };
-  const removeFromThisCart = (): void => {
-    setCart({});
+  const removeFromThisCart = (item): void => {
+    const newCart = removeFromCartPure(cart, item);
+    setCart(newCart);
   };
 
   return (
