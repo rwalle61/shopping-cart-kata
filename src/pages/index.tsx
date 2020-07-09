@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
-import { products } from '../data';
+import { products, getBrand } from '../data';
 import { addToCartPure } from '../utilities';
 import { getCartPrice } from '../utilities/cart.utils';
 
@@ -40,6 +40,7 @@ const Catalogue = ({ addToCart }): JSX.Element => (
 const CartItem = ({ description, quantity }): JSX.Element => (
   <div>
     <div>{`${quantity} ${description}`}</div>
+    <div>{getBrand(description)}</div>
     <Button onClick={(): void => null}>-</Button>
     <Button onClick={(): void => null}>+</Button>
   </div>

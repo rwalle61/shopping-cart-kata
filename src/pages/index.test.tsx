@@ -19,12 +19,14 @@ const defaultBrands = [
   'Sternzeit',
 ];
 
-const productWithMultipleVariants = 'Jungle Art Print Unframed';
+const productWithMultipleVariants = catalogueProducts[0];
 const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
   (size) => `${productWithMultipleVariants} ${size}`,
 );
-const productVariant = productVariants[0];
 const productVariantPrices = [30, 40, 50, 60, 120].map((price) => `${price}`);
+
+const productVariant = productVariants[0];
+const productBrand = defaultBrands[0];
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -84,6 +86,8 @@ describe('Home page', () => {
       expect(cartItemTitle).toBeInTheDocument();
 
       const cartItem = cartItemTitle.parentElement;
+      expect(within(cartItem).getByText(productBrand)).toBeInTheDocument();
+
       const [button1, button2] = within(cartItem).getAllByRole('button');
       expect(button1).toHaveTextContent('-');
       expect(button2).toHaveTextContent('+');

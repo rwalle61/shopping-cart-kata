@@ -1,6 +1,19 @@
 import * as data from '.';
 
 describe('data', () => {
+  describe('findProduct', () => {
+    it('returns the correct product', () => {
+      const product = data.findProduct('Jungle Art Print Unframed A4');
+      expect(product.title).toEqual('Jungle Art Print Unframed');
+    });
+  });
+  describe('getBrand', () => {
+    it('returns the correct brand', () => {
+      expect(data.getBrand('Jungle Art Print Unframed A4')).toEqual(
+        'Michael Belhadi',
+      );
+    });
+  });
   describe('products', () => {
     it('returns a summary of the default products', () => {
       expect(data.products).toMatchInlineSnapshot(`
