@@ -259,5 +259,39 @@ describe('Home page', () => {
       const incrementButton = within(cartItem).getByText('+').closest('button');
       expect(incrementButton).toBeDisabled();
     });
+    it("re-enables the item's Add buttons when it is back in stock", () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(lowStockVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+      for (let i = 0; i < lowStockVariantStock; i += 1) {
+        userEvent.click(catalogueItemButton);
+      }
+
+      const cart = screen.getByText('Cart').parentElement;
+      const cartItemTitle = within(cart).getByText(new RegExp(lowStockVariant));
+      const cartItem = cartItemTitle.parentElement;
+      const decrementButton = within(cartItem).getByText('-').closest('button');
+      userEvent.click(decrementButton);
+
+      const newCatalogue = screen.getByText('Catalogue').parentElement;
+      const newCatalogueItem = within(newCatalogue).getByText(lowStockVariant)
+        .parentElement;
+      const newCatalogueItemButton = within(newCatalogueItem).getByRole(
+        'button',
+      );
+      expect(newCatalogueItemButton).toHaveTextContent('Add to Cart');
+      expect(newCatalogueItemButton).toBeEnabled();
+
+      const newCart = screen.getByText('Cart').parentElement;
+      const newCartItemTitle = within(newCart).getByText(
+        new RegExp(lowStockVariant),
+      );
+      const newCartItem = newCartItemTitle.parentElement;
+      const incrementButton = within(newCartItem)
+        .getByText('+')
+        .closest('button');
+      expect(incrementButton).toBeEnabled();
+    });
   });
 });

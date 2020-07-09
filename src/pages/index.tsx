@@ -54,6 +54,16 @@ const Catalogue = ({ addToCart, isInStock }): JSX.Element => (
   </div>
 );
 
+const ButtonDecrementItem = ({ removeFromCart }): JSX.Element => (
+  <Button onClick={removeFromCart}>-</Button>
+);
+
+const ButtonIncrementItem = ({ addToCart, isInStock }): JSX.Element => (
+  <Button onClick={addToCart} disabled={!isInStock}>
+    +
+  </Button>
+);
+
 const CartItem = ({
   description,
   quantity,
@@ -64,13 +74,13 @@ const CartItem = ({
   <div>
     <div>{`${quantity} ${description}`}</div>
     <div>{getBrand(description)}</div>
-    <Button onClick={(): void => removeFromCart(description)}>-</Button>
-    <Button
-      onClick={(): void => addToCart(description)}
-      disabled={!isInStock(description)}
-    >
-      +
-    </Button>
+    <ButtonDecrementItem
+      removeFromCart={(): void => removeFromCart(description)}
+    />
+    <ButtonIncrementItem
+      addToCart={(): void => addToCart(description)}
+      isInStock={isInStock(description)}
+    />
   </div>
 );
 
