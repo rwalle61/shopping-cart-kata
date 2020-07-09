@@ -37,16 +37,21 @@ const Catalogue = ({ addToCart }): JSX.Element => (
   </div>
 );
 
-const CartItem = ({ description, quantity, addToCart }): JSX.Element => (
+const CartItem = ({
+  description,
+  quantity,
+  addToCart,
+  removeFromCart,
+}): JSX.Element => (
   <div>
     <div>{`${quantity} ${description}`}</div>
     <div>{getBrand(description)}</div>
-    <Button onClick={(): void => null}>-</Button>
+    <Button onClick={(): void => removeFromCart(description)}>-</Button>
     <Button onClick={(): void => addToCart(description)}>+</Button>
   </div>
 );
 
-const Cart = ({ items, addToCart }): JSX.Element => (
+const Cart = ({ items, addToCart, removeFromCart }): JSX.Element => (
   <div>
     <div>Cart</div>
     <div>
@@ -56,6 +61,7 @@ const Cart = ({ items, addToCart }): JSX.Element => (
           description={description}
           quantity={quantity}
           addToCart={addToCart}
+          removeFromCart={removeFromCart}
         />
       ))}
     </div>
@@ -70,11 +76,18 @@ const Home = (): JSX.Element => {
     const newCart = addToCartPure(cart, item);
     setCart(newCart);
   };
+  const removeFromThisCart = (): void => {
+    setCart({});
+  };
 
   return (
     <div>
       <Catalogue addToCart={addToThisCart} />
-      <Cart items={cart} addToCart={addToThisCart} />
+      <Cart
+        items={cart}
+        addToCart={addToThisCart}
+        removeFromCart={removeFromThisCart}
+      />
     </div>
   );
 };

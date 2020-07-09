@@ -131,6 +131,61 @@ describe('Home page', () => {
       const newCart = screen.getByText('Cart').parentElement;
       const newCartItemTitle = within(newCart).getByText(`2 ${productVariant}`);
       expect(newCartItemTitle).toBeInTheDocument();
+      expect(screen.getByText('Total:')).toBeInTheDocument();
+      expect(screen.getByText('£60.00')).toBeInTheDocument();
+    });
+  });
+  describe('when user removes an item from the cart', () => {
+    describe('when the cart contains just 1 of the item', () => {
+      it('removes the item from the cart and updates the cart price', () => {
+        const catalogue = screen.getByText('Catalogue').parentElement;
+        const catalogueItem = within(catalogue).getByText(productVariant)
+          .parentElement;
+        const catalogueItemButton = within(catalogueItem).getByRole('button');
+        userEvent.click(catalogueItemButton);
+
+        const cart = screen.getByText('Cart').parentElement;
+        const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
+        const cartItem = cartItemTitle.parentElement;
+        const decrementButton = within(cartItem)
+          .getByText('-')
+          .closest('button');
+        userEvent.click(decrementButton);
+
+        const newCart = screen.getByText('Cart').parentElement;
+        const newCartItemTitle = within(newCart).queryByText(
+          new RegExp(productVariant),
+        );
+        expect(newCartItemTitle).toBeNull();
+        expect(screen.getByText('Total:')).toBeInTheDocument();
+        expect(screen.getByText('£0.00')).toBeInTheDocument();
+      });
+    });
+    describe.skip('when the cart contains multiples of the item', () => {
+      it('keeps the item in the cart, updates the item quantity and cart price', () => {
+        const catalogue = screen.getByText('Catalogue').parentElement;
+        const catalogueItem = within(catalogue).getByText(productVariant)
+          .parentElement;
+        const catalogueItemButton = within(catalogueItem).getByRole('button');
+        userEvent.click(catalogueItemButton);
+        userEvent.click(catalogueItemButton);
+
+        const cart = screen.getByText('Cart').parentElement;
+        const cartItemTitle = within(cart).getByText(`2 ${productVariant}`);
+        const cartItem = cartItemTitle.parentElement;
+        const decrementButton = within(cartItem)
+          .getByText('-')
+          .closest('button');
+        userEvent.click(decrementButton);
+
+        const newCart = screen.getByText('Cart').parentElement;
+        const newCartItemTitle = within(newCart).getByText(
+          `1 ${productVariant}`,
+        );
+        expect(newCartItemTitle).toBeInTheDocument();
+        expect(screen.getByText('Total:')).toBeInTheDocument();
+        expect(screen.getByText('£30.00')).toBeInTheDocument();
+      });
     });
   });
 });
