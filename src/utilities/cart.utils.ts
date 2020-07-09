@@ -1,11 +1,13 @@
-const priceItem = ([name, quantity]) => {
-  return 30;
+import { getItemPrice } from '../data';
+
+export const priceItem = (name, quantity): number => {
+  return getItemPrice(name) * quantity;
 };
 
-export const priceItems = (items) =>
+export const priceItems = (items): number =>
   Object.entries(items).reduce(
-    (subtotal, item) => subtotal + priceItem(item),
+    (subtotal, [name, quantity]) => subtotal + priceItem(name, quantity),
     0,
   );
 
-export const getCartPrice = (items) => priceItems(items).toFixed(2);
+export const getCartPrice = (items): string => priceItems(items).toFixed(2);
