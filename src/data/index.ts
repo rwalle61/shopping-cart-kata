@@ -30,7 +30,12 @@ export const getItemPrice = (description: string): number => {
 export const getBrand = (description: string): string =>
   findProduct(description).brand;
 
-export const isInStock = (description: string): boolean => {
+const getQuantityInCart = (description: string, cart): number => {
+  return cart[description] || 0;
+};
+
+export const isInStockGivenCart = (description: string, cart): boolean => {
+  const quantityInCart = getQuantityInCart(description, cart);
   const item = findItem(description);
-  return item.stock > 0;
+  return item.stock > quantityInCart;
 };

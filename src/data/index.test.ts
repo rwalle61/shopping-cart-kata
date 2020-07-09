@@ -14,6 +14,21 @@ describe('data', () => {
       );
     });
   });
+  describe('isInStockGivenCart', () => {
+    const itemDescription = 'Jungle Art Print Unframed A3';
+    const itemStock = 4;
+    it('returns true when the item has remaining stock', () => {
+      const cart = { [itemDescription]: itemStock - 1 };
+      expect(data.isInStockGivenCart(itemDescription, cart)).toBe(true);
+    });
+    it('returns false when the item does not have remaining stock', () => {
+      const cart = { [itemDescription]: itemStock };
+      expect(data.isInStockGivenCart(itemDescription, cart)).toBe(false);
+    });
+    it('returns true when the item is not in the cart', () => {
+      expect(data.isInStockGivenCart(itemDescription, {})).toBe(true);
+    });
+  });
   describe('products', () => {
     it('returns a summary of the default products', () => {
       expect(data.products).toMatchInlineSnapshot(`

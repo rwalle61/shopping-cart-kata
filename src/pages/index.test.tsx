@@ -28,6 +28,8 @@ const productVariantPrices = [30, 40, 50, 60, 120].map((price) => `${price}`);
 const productVariant = productVariants[0];
 const productBrand = defaultBrands[0];
 const outOfStockVariant = 'Black Orchidee Art Print Unframed A4';
+const lowStockVariant = 'Jungle Art Print Unframed A3';
+const lowStockVariantStock = 4;
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -212,7 +214,7 @@ describe('Home page', () => {
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
   });
-  describe('when an item is/becomes out of stock', () => {
+  describe('when an item runs out of stock', () => {
     it('disables an item\'s "Add to Cart" button if it is already out of stock', () => {
       const catalogue = screen.getByText('Catalogue').parentElement;
       const catalogueItem = within(catalogue).getByText(outOfStockVariant)
@@ -221,6 +223,41 @@ describe('Home page', () => {
 
       expect(catalogueItemButton).toHaveTextContent('Out of Stock');
       expect(catalogueItemButton).toBeDisabled();
+    });
+    it('disables an item\'s "Add to Cart" button when it runs out of stock', () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(lowStockVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+
+      for (let i = 0; i < lowStockVariantStock; i += 1) {
+        userEvent.click(catalogueItemButton);
+      }
+
+      const newCatalogue = screen.getByText('Catalogue').parentElement;
+      const newCatalogueItem = within(newCatalogue).getByText(lowStockVariant)
+        .parentElement;
+      const newCatalogueItemButton = within(newCatalogueItem).getByRole(
+        'button',
+      );
+      expect(newCatalogueItemButton).toHaveTextContent('Out of Stock');
+      expect(newCatalogueItemButton).toBeDisabled();
+    });
+    it('disables an item\'s "Increment" button when it runs out of stock', () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(lowStockVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+
+      for (let i = 0; i < lowStockVariantStock; i += 1) {
+        userEvent.click(catalogueItemButton);
+      }
+
+      const cart = screen.getByText('Cart').parentElement;
+      const cartItemTitle = within(cart).getByText(new RegExp(lowStockVariant));
+      const cartItem = cartItemTitle.parentElement;
+      const incrementButton = within(cartItem).getByText('+').closest('button');
+      expect(incrementButton).toBeDisabled();
     });
   });
 });

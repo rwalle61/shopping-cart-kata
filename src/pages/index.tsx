@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
-import { products, getBrand, isInStock } from '../data';
+import { products, getBrand, isInStockGivenCart } from '../data';
 import { addToCartPure, removeFromCartPure } from '../utilities';
 import { getCartPrice } from '../utilities/cart.utils';
 
@@ -12,7 +12,13 @@ const ButtonAddToCart = ({ addToCart }): JSX.Element => (
   <Button onClick={addToCart}>Add to Cart</Button>
 );
 
-const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
+const Product = ({
+  title,
+  brand,
+  variants,
+  addToCart,
+  isInStock,
+}): JSX.Element => (
   <div>
     <div>{title}</div>
     <div>{brand}</div>
@@ -32,7 +38,7 @@ const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
   </div>
 );
 
-const Catalogue = ({ addToCart }): JSX.Element => (
+const Catalogue = ({ addToCart, isInStock }): JSX.Element => (
   <div>
     <div>Catalogue</div>
     {products.map(({ title, brand, variants }) => (
@@ -42,6 +48,7 @@ const Catalogue = ({ addToCart }): JSX.Element => (
         brand={brand}
         variants={variants}
         addToCart={addToCart}
+        isInStock={isInStock}
       />
     ))}
   </div>
@@ -52,16 +59,28 @@ const CartItem = ({
   quantity,
   addToCart,
   removeFromCart,
+  isInStock,
 }): JSX.Element => (
   <div>
     <div>{`${quantity} ${description}`}</div>
     <div>{getBrand(description)}</div>
     <Button onClick={(): void => removeFromCart(description)}>-</Button>
-    <Button onClick={(): void => addToCart(description)}>+</Button>
+    <Button
+      onClick={(): void => addToCart(description)}
+      disabled={!isInStock(description)}
+    >
+      +
+    </Button>
   </div>
 );
 
-const Cart = ({ items, addToCart, removeFromCart, emptyCart }): JSX.Element => (
+const Cart = ({
+  items,
+  addToCart,
+  removeFromCart,
+  emptyCart,
+  isInStock,
+}): JSX.Element => (
   <div>
     <div>Cart</div>
     <Button onClick={emptyCart}>Empty Cart</Button>
@@ -73,6 +92,7 @@ const Cart = ({ items, addToCart, removeFromCart, emptyCart }): JSX.Element => (
           quantity={quantity}
           addToCart={addToCart}
           removeFromCart={removeFromCart}
+          isInStock={isInStock}
         />
       ))}
     </div>
@@ -94,15 +114,18 @@ const Home = (): JSX.Element => {
   const emptyCart = (): void => {
     setCart({});
   };
+  const isInStock = (itemDescription): boolean =>
+    isInStockGivenCart(itemDescription, cart);
 
   return (
     <div>
-      <Catalogue addToCart={addToThisCart} />
+      <Catalogue addToCart={addToThisCart} isInStock={isInStock} />
       <Cart
         items={cart}
         addToCart={addToThisCart}
         removeFromCart={removeFromThisCart}
         emptyCart={emptyCart}
+        isInStock={isInStock}
       />
     </div>
   );
