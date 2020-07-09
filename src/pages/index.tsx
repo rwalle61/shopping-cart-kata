@@ -1,8 +1,16 @@
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
-import { products, getBrand } from '../data';
+import { products, getBrand, isInStock } from '../data';
 import { addToCartPure, removeFromCartPure } from '../utilities';
 import { getCartPrice } from '../utilities/cart.utils';
+
+const ButtonOutOfStock = (): JSX.Element => (
+  <Button disabled>Out of Stock</Button>
+);
+
+const ButtonAddToCart = ({ addToCart }): JSX.Element => (
+  <Button onClick={addToCart}>Add to Cart</Button>
+);
 
 const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
   <div>
@@ -13,9 +21,11 @@ const Product = ({ title, brand, variants, addToCart }): JSX.Element => (
         <div key={description}>
           <div>{description}</div>
           <div>{price}</div>
-          <Button onClick={(): void => addToCart(description)}>
-            Add to Cart
-          </Button>
+          {isInStock(description) ? (
+            <ButtonAddToCart addToCart={(): void => addToCart(description)} />
+          ) : (
+            <ButtonOutOfStock />
+          )}
         </div>
       ))}
     </div>

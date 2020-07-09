@@ -1,11 +1,9 @@
 import productsJson from './product.json';
 
-const getVariant = ({ description, price }): any => ({ description, price });
-
 export const products = productsJson.map((product) => ({
   title: product.title,
   brand: product.brand.name,
-  variants: product.skus.map(getVariant),
+  variants: product.skus,
 }));
 
 export const findProduct = (description: string): any =>
@@ -31,3 +29,8 @@ export const getItemPrice = (description: string): number => {
 
 export const getBrand = (description: string): string =>
   findProduct(description).brand;
+
+export const isInStock = (description: string): boolean => {
+  const item = findItem(description);
+  return item.stock > 0;
+};

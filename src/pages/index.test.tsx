@@ -27,6 +27,7 @@ const productVariantPrices = [30, 40, 50, 60, 120].map((price) => `${price}`);
 
 const productVariant = productVariants[0];
 const productBrand = defaultBrands[0];
+const outOfStockVariant = 'Black Orchidee Art Print Unframed A4';
 
 describe('Home page', () => {
   beforeEach(() => {
@@ -43,7 +44,7 @@ describe('Home page', () => {
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£0.00')).toBeInTheDocument();
     });
-    it('renders the titles and brands of the (5) default products in the catalogue', () => {
+    it('renders the default products in the catalogue', () => {
       const catalogue = screen.getByText('Catalogue').parentElement;
       catalogueProducts.forEach((product, i) => {
         const productTitle = within(catalogue).getAllByText(product)[0];
@@ -209,6 +210,17 @@ describe('Home page', () => {
       expect(newCartItemTitle).toBeNull();
       expect(screen.getByText('Total:')).toBeInTheDocument();
       expect(screen.getByText('£0.00')).toBeInTheDocument();
+    });
+  });
+  describe('when an item is/becomes out of stock', () => {
+    it('disables an item\'s "Add to Cart" button if it is already out of stock', () => {
+      const catalogue = screen.getByText('Catalogue').parentElement;
+      const catalogueItem = within(catalogue).getByText(outOfStockVariant)
+        .parentElement;
+      const catalogueItemButton = within(catalogueItem).getByRole('button');
+
+      expect(catalogueItemButton).toHaveTextContent('Out of Stock');
+      expect(catalogueItemButton).toBeDisabled();
     });
   });
 });
