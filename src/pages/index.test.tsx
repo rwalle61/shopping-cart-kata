@@ -3,37 +3,38 @@ import userEvent from '@testing-library/user-event';
 import { render, screen, within } from '@testing-library/react';
 import Home from '.';
 
-const productTitle = 'Jungle Art Print Unframed';
-const productVariant = `${productTitle} A4`;
+const itemTitle = 'Jungle Art Print Unframed';
+const itemVariantDesc = `${itemTitle} A4`;
 
-const getCatalogueItem = (matcher): HTMLElement => {
+const getElementInCatalogue = (matcher): HTMLElement => {
   const catalogue = screen.getByText('Catalogue').parentElement;
-  const catalogueItem = within(catalogue).getByText(matcher);
-  return catalogueItem;
+  return within(catalogue).getByText(matcher);
 };
 
-const openDropdown = async (matcher): Promise<HTMLElement> => {
-  const productElement = screen.getByText(matcher).parentElement.parentElement;
-  const addToCartDropdown = within(productElement).getByText('Add to Cart');
-  userEvent.click(addToCartDropdown);
-  const newProductElement = (await screen.findByText(matcher)).parentElement
-    .parentElement;
-  return newProductElement;
-};
-
-const openDropDownAndGetCatalogueItem = async (
-  _productTitle,
-  _productVariant,
+const openItemDropdownInCatalogue = async (
+  titleMatcher,
 ): Promise<HTMLElement> => {
-  await openDropdown(_productTitle);
-  return getCatalogueItem(_productVariant);
+  const item = screen.getByText(titleMatcher).parentElement.parentElement;
+  const addToCartDropdown = within(item).getByText('Add to Cart');
+  userEvent.click(addToCartDropdown);
+  const newItem = (await screen.findByText(titleMatcher)).parentElement
+    .parentElement;
+  return newItem;
+};
+
+const getItemVariantInCatalogueDropdown = async (
+  _itemTitle,
+  _itemVariant,
+): Promise<HTMLElement> => {
+  await openItemDropdownInCatalogue(_itemTitle);
+  return getElementInCatalogue(_itemVariant);
 };
 
 const getCart = (): HTMLElement => screen.getByText('Cart').parentElement;
 
-const getCartItem = (matcher): HTMLElement => {
-  const cartItemTitle = within(getCart()).getByText(matcher);
-  return cartItemTitle.parentElement.parentElement;
+const getCartItemVariant = (descriptionMatcher): HTMLElement => {
+  const variantDescription = within(getCart()).getByText(descriptionMatcher);
+  return variantDescription.parentElement.parentElement;
 };
 
 describe('Home page', () => {
@@ -41,24 +42,24 @@ describe('Home page', () => {
     render(<Home />);
   });
   describe('when app starts', () => {
-    it('renders the "Catalogue" title', () => {
+    it('renders the catalogue title', () => {
       expect(screen.getByText('Catalogue')).toBeInTheDocument();
     });
-    it('renders the "Cart" title', () => {
+    it('renders the cart title', () => {
       expect(screen.getByText('Cart')).toBeInTheDocument();
     });
     it('renders the default cart price (£0.00)', () => {
       expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
     });
-    it('renders the default products in the catalogue', () => {
-      const catalogueProducts = [
+    it('renders the default catalogue items', () => {
+      const itemTitles = [
         'Jungle Art Print Unframed',
         'Unframed Col Du Glandon Art Print',
         'Mexico Art Print Unframed',
         'Black Orchidee Art Print Unframed',
         'Lemon Cube Chair Copper',
       ];
-      const defaultBrands = [
+      const itemBrands = [
         'Michael Belhadi',
         'David Sparshott',
         'Michael Belhadi',
@@ -67,166 +68,167 @@ describe('Home page', () => {
       ];
       const catalogue = screen.getByText('Catalogue').parentElement;
 
-      catalogueProducts.forEach((product, i) => {
-        const title = within(catalogue).getByText(product);
+      itemTitles.forEach((titleString, i) => {
+        const title = within(catalogue).getByText(titleString);
         expect(title).toBeInTheDocument();
-        const productElement = title.parentElement.parentElement;
-        const brand = within(productElement).getByText(defaultBrands[i]);
+        const item = title.parentElement.parentElement;
+        const brand = within(item).getByText(itemBrands[i]);
         expect(brand).toBeInTheDocument();
-        const img = within(productElement).getByRole('img');
+        const img = within(item).getByRole('img');
         expect(img).toBeInTheDocument();
         expect(img).toHaveAttribute('src');
       });
     });
-    it('renders dropdowns of product variants with descriptions and prices', async () => {
-      const productWithMultipleVariants = 'Jungle Art Print Unframed';
-      const productVariants = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
-        (size) => `${productWithMultipleVariants} ${size}`,
+    it('renders dropdowns of item variants with descriptions and prices', async () => {
+      const variantDescriptions = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
+        (size) => `${itemTitle} ${size}`,
       );
-      const productVariantPrices = [30, 40, 50, 60, 120].map(
+      const variantPrices = [30, 40, 50, 60, 120].map(
         (price) => `£${price}.00`,
       );
 
-      const productElement = screen.getByText(productWithMultipleVariants)
-        .parentElement.parentElement;
-      const addToCartDropdown = within(productElement).getByText('Add to Cart');
+      const item = screen.getByText(itemTitle).parentElement.parentElement;
+      const addToCartDropdown = within(item).getByText('Add to Cart');
       userEvent.click(addToCartDropdown);
 
-      const newProductElement = (
-        await screen.findByText(productWithMultipleVariants)
-      ).parentElement.parentElement;
-      productVariants.forEach((variant, i) => {
-        const variantDescription = within(newProductElement).getByText(variant);
-        expect(variantDescription).toBeInTheDocument();
-        const variantElement = variantDescription.parentElement;
-        const variantPrice = within(variantElement).getByText(
-          productVariantPrices[i],
-        );
-        expect(variantPrice).toBeInTheDocument();
+      const newItem = (await screen.findByText(itemTitle)).parentElement
+        .parentElement;
+      variantDescriptions.forEach((descriptionString, i) => {
+        const description = within(newItem).getByText(descriptionString);
+        expect(description).toBeInTheDocument();
+        const variant = description.parentElement;
+        const price = within(variant).getByText(variantPrices[i]);
+        expect(price).toBeInTheDocument();
       });
     });
   });
-  describe('when user adds an item to the cart', () => {
-    it('renders that item in the cart with details and buttons', async () => {
-      const productBrand = 'Michael Belhadi';
-      const productVariantPrice = '£30.00';
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
-        productTitle,
-        productVariant,
+  describe('when user adds an item variant to the cart', () => {
+    it('renders that item variant in the cart with details and buttons', async () => {
+      const itemBrand = 'Michael Belhadi';
+      const variantPrice = '£30.00';
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+        itemTitle,
+        itemVariantDesc,
       );
 
-      userEvent.click(catalogueItem);
+      userEvent.click(catalogueItemVariant);
 
       const cart = getCart();
-      const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
-      expect(cartItemTitle).toBeInTheDocument();
+      const variantDescription = within(cart).getByText(`1 ${itemVariantDesc}`);
+      expect(variantDescription).toBeInTheDocument();
 
-      const cartItem = cartItemTitle.parentElement.parentElement;
-      expect(within(cartItem).getByText(productBrand)).toBeInTheDocument();
+      const cartItemVariant = variantDescription.parentElement.parentElement;
+      expect(within(cartItemVariant).getByText(itemBrand)).toBeInTheDocument();
       expect(
-        within(cartItem).getByText(productVariantPrice),
+        within(cartItemVariant).getByText(variantPrice),
       ).toBeInTheDocument();
-      const img = within(cartItem).getByRole('img');
+      const img = within(cartItemVariant).getByRole('img');
       expect(img).toBeInTheDocument();
       expect(img).toHaveAttribute('src');
 
-      const [button1, button2] = within(cartItem).getAllByRole('button');
+      const [button1, button2] = within(cartItemVariant).getAllByRole('button');
       expect(button1).toHaveTextContent('-');
       expect(button2).toHaveTextContent('+');
     });
-    it('renders multiples of that item in the cart', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
-        productTitle,
-        productVariant,
+    it('renders multiples of that item variant in the cart', async () => {
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+        itemTitle,
+        itemVariantDesc,
       );
 
-      userEvent.click(catalogueItem);
-      userEvent.click(catalogueItem);
+      userEvent.click(catalogueItemVariant);
+      userEvent.click(catalogueItemVariant);
 
       const cart = getCart();
-      expect(within(cart).getByText(`2 ${productVariant}`)).toBeInTheDocument();
+      expect(
+        within(cart).getByText(`2 ${itemVariantDesc}`),
+      ).toBeInTheDocument();
     });
     it('updates the cart price', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
-        productTitle,
-        productVariant,
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+        itemTitle,
+        itemVariantDesc,
       );
 
-      userEvent.click(catalogueItem);
+      userEvent.click(catalogueItemVariant);
 
       expect(screen.getByText('Total: £30.00')).toBeInTheDocument();
     });
-    it('renders a button to add more of an item to the cart', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
-        productTitle,
-        productVariant,
+    it('renders a button to add more of an item variant to the cart', async () => {
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+        itemTitle,
+        itemVariantDesc,
       );
-      userEvent.click(catalogueItem);
+      userEvent.click(catalogueItemVariant);
 
-      const cartItem = getCartItem(`1 ${productVariant}`);
-      const incrementButton = within(cartItem).getByText('+').closest('button');
+      const cartItemVariant = getCartItemVariant(`1 ${itemVariantDesc}`);
+      const incrementButton = within(cartItemVariant)
+        .getByText('+')
+        .closest('button');
       userEvent.click(incrementButton);
 
       const newCart = getCart();
-      const newCartItemTitle = within(newCart).getByText(`2 ${productVariant}`);
-      expect(newCartItemTitle).toBeInTheDocument();
+      const newVariantDescription = within(newCart).getByText(
+        `2 ${itemVariantDesc}`,
+      );
+      expect(newVariantDescription).toBeInTheDocument();
       expect(screen.getByText('Total: £60.00')).toBeInTheDocument();
     });
   });
-  describe('when user removes an item from the cart', () => {
-    describe('when the cart contains just 1 of the item', () => {
-      it('removes the item from the cart and updates the cart price', async () => {
-        const catalogueItem = await openDropDownAndGetCatalogueItem(
-          productTitle,
-          productVariant,
+  describe('when user removes an item variant from the cart', () => {
+    describe('when the cart contains just 1 of the item variant', () => {
+      it('removes the item variant from the cart and updates the cart price', async () => {
+        const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+          itemTitle,
+          itemVariantDesc,
         );
-        userEvent.click(catalogueItem);
+        userEvent.click(catalogueItemVariant);
 
-        const cartItem = getCartItem(`1 ${productVariant}`);
-        const decrementButton = within(cartItem)
+        const cartItemVariant = getCartItemVariant(`1 ${itemVariantDesc}`);
+        const decrementButton = within(cartItemVariant)
           .getByText('-')
           .closest('button');
         userEvent.click(decrementButton);
 
         const newCart = getCart();
-        const newCartItemTitle = within(newCart).queryByText(
-          new RegExp(productVariant),
+        const newVariantDescription = within(newCart).queryByText(
+          new RegExp(itemVariantDesc),
         );
-        expect(newCartItemTitle).toBeNull();
+        expect(newVariantDescription).toBeNull();
         expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
       });
     });
-    describe('when the cart contains multiples of the item', () => {
-      it('keeps the item in the cart, updates the item quantity and cart price', async () => {
-        const catalogueItem = await openDropDownAndGetCatalogueItem(
-          productTitle,
-          productVariant,
+    describe('when the cart contains multiples of the item variant', () => {
+      it('keeps the item variant in the cart, updates the item variant quantity and cart price', async () => {
+        const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+          itemTitle,
+          itemVariantDesc,
         );
-        userEvent.click(catalogueItem);
-        userEvent.click(catalogueItem);
+        userEvent.click(catalogueItemVariant);
+        userEvent.click(catalogueItemVariant);
 
-        const cartItem = getCartItem(`2 ${productVariant}`);
-        const decrementButton = within(cartItem)
+        const cartItemVariant = getCartItemVariant(`2 ${itemVariantDesc}`);
+        const decrementButton = within(cartItemVariant)
           .getByText('-')
           .closest('button');
         userEvent.click(decrementButton);
 
         const newCart = getCart();
-        const newCartItemTitle = within(newCart).getByText(
-          `1 ${productVariant}`,
+        const newVariantDescription = within(newCart).getByText(
+          `1 ${itemVariantDesc}`,
         );
-        expect(newCartItemTitle).toBeInTheDocument();
+        expect(newVariantDescription).toBeInTheDocument();
         expect(screen.getByText('Total: £30.00')).toBeInTheDocument();
       });
     });
   });
   describe('when user empties the cart', () => {
     it('removes all items and resets the cart price to 0', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
-        productTitle,
-        productVariant,
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
+        itemTitle,
+        itemVariantDesc,
       );
-      userEvent.click(catalogueItem);
+      userEvent.click(catalogueItemVariant);
 
       const cart = getCart();
       const emptyCartButton = within(cart)
@@ -235,83 +237,93 @@ describe('Home page', () => {
       userEvent.click(emptyCartButton);
 
       const newCart = getCart();
-      const newCartItemTitle = within(newCart).queryByText(
-        new RegExp(productVariant),
+      const newVariantDescription = within(newCart).queryByText(
+        new RegExp(itemVariantDesc),
       );
-      expect(newCartItemTitle).toBeNull();
+      expect(newVariantDescription).toBeNull();
       expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
     });
   });
-  describe('when an item runs out of stock', () => {
+  describe('when an item variant runs out of stock', () => {
     const outOfStockTitle = 'Black Orchidee Art Print Unframed';
-    const outOfStockVariant = `${outOfStockTitle} A4`;
+    const outOfStockVariantDescription = `${outOfStockTitle} A4`;
     const lowStockTitle = 'Jungle Art Print Unframed';
-    const lowStockVariant = `${lowStockTitle} A3`;
+    const lowStockVariantDescription = `${lowStockTitle} A3`;
     const lowStockVariantStock = 4;
-    it('disables an item\'s "Add to Cart" button if it is already out of stock', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
+    it('disables an item variant\'s "Add to Cart" button if it is already out of stock', async () => {
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         outOfStockTitle,
-        new RegExp(outOfStockVariant),
+        new RegExp(outOfStockVariantDescription),
       );
 
-      expect(catalogueItem).toHaveTextContent(/\[OUT OF STOCK\]/);
+      expect(catalogueItemVariant).toHaveTextContent(/\[OUT OF STOCK\]/);
 
       const cart = getCart();
-      const cartItemTitle = within(cart).queryByText(
-        new RegExp(outOfStockVariant),
+      const variantDescription = within(cart).queryByText(
+        new RegExp(outOfStockVariantDescription),
       );
-      expect(cartItemTitle).toBeNull();
+      expect(variantDescription).toBeNull();
     });
-    it('disables an item\'s "Add to Cart" button when it runs out of stock', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
+    it('disables an item variant\'s "Add to Cart" button when it runs out of stock', async () => {
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
-        lowStockVariant,
+        lowStockVariantDescription,
       );
 
       for (let i = 0; i < lowStockVariantStock; i += 1) {
-        userEvent.click(catalogueItem);
+        userEvent.click(catalogueItemVariant);
       }
 
-      const newCatalogueItem = await openDropDownAndGetCatalogueItem(
+      const newCatalogueItem = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
-        new RegExp(lowStockVariant),
+        new RegExp(lowStockVariantDescription),
       );
       expect(newCatalogueItem).toHaveTextContent(/\[OUT OF STOCK\]/);
     });
-    it('disables an item\'s "Increment" button when it runs out of stock', async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
+    it('disables an item variant\'s "Increment" button when it runs out of stock', async () => {
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
-        lowStockVariant,
+        lowStockVariantDescription,
       );
 
       for (let i = 0; i < lowStockVariantStock; i += 1) {
-        userEvent.click(catalogueItem);
+        userEvent.click(catalogueItemVariant);
       }
 
-      const cartItem = getCartItem(new RegExp(lowStockVariant));
-      const incrementButton = within(cartItem).getByText('+').closest('button');
+      const cartItemVariant = getCartItemVariant(
+        new RegExp(lowStockVariantDescription),
+      );
+      const incrementButton = within(cartItemVariant)
+        .getByText('+')
+        .closest('button');
       expect(incrementButton).toBeDisabled();
     });
-    it("re-enables the item's Add buttons when it is back in stock", async () => {
-      const catalogueItem = await openDropDownAndGetCatalogueItem(
+    it("re-enables the item variant's Add buttons when it is back in stock", async () => {
+      const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
-        lowStockVariant,
+        lowStockVariantDescription,
       );
       for (let i = 0; i < lowStockVariantStock; i += 1) {
-        userEvent.click(catalogueItem);
+        userEvent.click(catalogueItemVariant);
       }
 
-      const cartItem = getCartItem(new RegExp(lowStockVariant));
-      const decrementButton = within(cartItem).getByText('-').closest('button');
+      const cartItemVariant = getCartItemVariant(
+        new RegExp(lowStockVariantDescription),
+      );
+      const decrementButton = within(cartItemVariant)
+        .getByText('-')
+        .closest('button');
       userEvent.click(decrementButton);
 
-      const newCatalogueItem = await openDropDownAndGetCatalogueItem(
+      const newCatalogueItem = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
-        lowStockVariant,
+        lowStockVariantDescription,
       );
       expect(newCatalogueItem).not.toHaveTextContent(/\[OUT OF STOCK\]/);
 
-      const newCartItem = getCartItem(new RegExp(lowStockVariant));
+      const newCartItem = getCartItemVariant(
+        new RegExp(lowStockVariantDescription),
+      );
       const incrementButton = within(newCartItem)
         .getByText('+')
         .closest('button');

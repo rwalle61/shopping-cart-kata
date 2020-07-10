@@ -1,35 +1,35 @@
 import productsJson from './product.json';
 
-export const products = productsJson.map((product) => ({
+export const items = productsJson.map((product) => ({
   title: product.title,
   brand: product.brand.name,
   variants: product.skus,
   image: product.image,
 }));
 
-export const findProduct = (description: string): any =>
-  products.find((product) => description.includes(product.title));
+export const findItem = (description: string): any =>
+  items.find((product) => description.includes(product.title));
 
-const findItem = (description: string): any => {
+const findItemVariant = (description: string): any => {
   // eslint-disable-next-line no-restricted-syntax
-  for (const product of products) {
-    const item = product.variants.find(
+  for (const item of items) {
+    const foundVariant = item.variants.find(
       (variant) => variant.description === description,
     );
-    if (item) {
-      return item;
+    if (foundVariant) {
+      return foundVariant;
     }
   }
   return null;
 };
 
-export const getItemPrice = (description: string): number => {
-  const item = findItem(description);
-  return item.price;
+export const getItemVariantPrice = (description: string): number => {
+  const variant = findItemVariant(description);
+  return variant.price;
 };
 
 export const getBrand = (description: string): string =>
-  findProduct(description).brand;
+  findItem(description).brand;
 
 const getQuantityInCart = (description: string, cart): number => {
   return cart[description] || 0;
@@ -37,9 +37,8 @@ const getQuantityInCart = (description: string, cart): number => {
 
 export const isInStockGivenCart = (description: string, cart): boolean => {
   const quantityInCart = getQuantityInCart(description, cart);
-  const item = findItem(description);
-  return item.stock > quantityInCart;
+  const variant = findItemVariant(description);
+  return variant.stock > quantityInCart;
 };
 
-export const getImageSrc = (matcher: string): string =>
-  findProduct(matcher).image;
+export const getImageSrc = (matcher: string): string => findItem(matcher).image;

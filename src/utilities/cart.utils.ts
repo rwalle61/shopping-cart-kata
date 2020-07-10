@@ -1,8 +1,8 @@
-import { getItemPrice } from '../data';
+import { getItemVariantPrice } from '../data';
 import { priceToString } from '.';
 
 export const priceItem = (name, quantity): number => {
-  return getItemPrice(name) * quantity;
+  return getItemVariantPrice(name) * quantity;
 };
 
 export const priceItems = (items): number =>
@@ -11,7 +11,7 @@ export const priceItems = (items): number =>
     0,
   );
 
-export const getItemPriceString = (description: string): string =>
-  priceToString(getItemPrice(description));
+export const getItemVariantPriceString = (description: string): string =>
+  priceToString(getItemVariantPrice(description));
 
 export const getCartPrice = (items): string => priceToString(priceItems(items));

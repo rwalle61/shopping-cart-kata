@@ -1,10 +1,10 @@
 import * as data from '.';
 
 describe('data', () => {
-  describe('findProduct', () => {
-    it('returns the correct product', () => {
-      const product = data.findProduct('Jungle Art Print Unframed A4');
-      expect(product.title).toEqual('Jungle Art Print Unframed');
+  describe('findItem', () => {
+    it('returns the correct item', () => {
+      const item = data.findItem('Jungle Art Print Unframed A4');
+      expect(item.title).toEqual('Jungle Art Print Unframed');
     });
   });
   describe('getBrand', () => {
@@ -15,23 +15,23 @@ describe('data', () => {
     });
   });
   describe('isInStockGivenCart', () => {
-    const itemDescription = 'Jungle Art Print Unframed A3';
-    const itemStock = 4;
+    const itemVariantDescription = 'Jungle Art Print Unframed A3';
+    const itemVariantStock = 4;
     it('returns true when the item has remaining stock', () => {
-      const cart = { [itemDescription]: itemStock - 1 };
-      expect(data.isInStockGivenCart(itemDescription, cart)).toBe(true);
+      const cart = { [itemVariantDescription]: itemVariantStock - 1 };
+      expect(data.isInStockGivenCart(itemVariantDescription, cart)).toBe(true);
     });
     it('returns false when the item does not have remaining stock', () => {
-      const cart = { [itemDescription]: itemStock };
-      expect(data.isInStockGivenCart(itemDescription, cart)).toBe(false);
+      const cart = { [itemVariantDescription]: itemVariantStock };
+      expect(data.isInStockGivenCart(itemVariantDescription, cart)).toBe(false);
     });
     it('returns true when the item is not in the cart', () => {
-      expect(data.isInStockGivenCart(itemDescription, {})).toBe(true);
+      expect(data.isInStockGivenCart(itemVariantDescription, {})).toBe(true);
     });
   });
-  describe('products', () => {
-    it('returns a summary of the default products', () => {
-      expect(data.products).toMatchInlineSnapshot(`
+  describe('items', () => {
+    it('returns a summary of the default items', () => {
+      expect(data.items).toMatchInlineSnapshot(`
         Array [
           Object {
             "brand": "Michael Belhadi",

@@ -7,15 +7,21 @@ import Image from 'react-bootstrap/Image';
 import ListGroup from 'react-bootstrap/ListGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { products, getBrand, isInStockGivenCart, getImageSrc } from '../data';
+import {
+  items as catalogueItems,
+  getBrand,
+  isInStockGivenCart,
+  getImageSrc,
+} from '../data';
 import { addToCartPure, removeFromCartPure, priceToString } from '../utilities';
-import { getCartPrice, getItemPriceString } from '../utilities/cart.utils';
+import {
+  getCartPrice,
+  getItemVariantPriceString,
+} from '../utilities/cart.utils';
 
-const ProductImage = ({ src }): JSX.Element => (
-  <Image src={src} fluid rounded />
-);
+const ItemImage = ({ src }): JSX.Element => <Image src={src} fluid rounded />;
 
-const Product = ({
+const CatalogueItem = ({
   title,
   brand,
   variants,
@@ -24,7 +30,7 @@ const Product = ({
 }): JSX.Element => (
   <Row>
     <Col xs={3} sm={2} md={2}>
-      <ProductImage src={getImageSrc(title)} />
+      <ItemImage src={getImageSrc(title)} />
     </Col>
     <Col>
       <b>{title}</b>
@@ -47,13 +53,13 @@ const Product = ({
   </Row>
 );
 
-const Catalogue = ({ addToCart, isInStock }): JSX.Element => (
+const Catalogue = ({ items, addToCart, isInStock }): JSX.Element => (
   <div>
     <h1 className='text-center'>Catalogue</h1>
     <ListGroup variant='flush'>
-      {products.map(({ title, brand, variants }) => (
+      {items.map(({ title, brand, variants }) => (
         <ListGroup.Item key={title}>
-          <Product
+          <CatalogueItem
             title={title}
             brand={brand}
             variants={variants}
@@ -66,17 +72,17 @@ const Catalogue = ({ addToCart, isInStock }): JSX.Element => (
   </div>
 );
 
-const ButtonDecrementItem = ({ removeFromCart }): JSX.Element => (
+const DecrementButton = ({ removeFromCart }): JSX.Element => (
   <Button onClick={removeFromCart}>-</Button>
 );
 
-const ButtonIncrementItem = ({ addToCart, isInStock }): JSX.Element => (
+const IncrementButton = ({ addToCart, isInStock }): JSX.Element => (
   <Button onClick={addToCart} disabled={!isInStock}>
     +
   </Button>
 );
 
-const CartItem = ({
+const CartItemVariant = ({
   description,
   quantity,
   addToCart,
@@ -85,18 +91,18 @@ const CartItem = ({
 }): JSX.Element => (
   <Row>
     <Col xs={3} sm={2} md={2}>
-      <ProductImage src={getImageSrc(description)} />
+      <ItemImage src={getImageSrc(description)} />
     </Col>
     <Col>
       <b>{`${quantity} ${description}`}</b>
       <div>{getBrand(description)}</div>
-      <i>{getItemPriceString(description)}</i>
+      <i>{getItemVariantPriceString(description)}</i>
     </Col>
     <ButtonGroup>
-      <ButtonDecrementItem
+      <DecrementButton
         removeFromCart={(): void => removeFromCart(description)}
       />
-      <ButtonIncrementItem
+      <IncrementButton
         addToCart={(): void => addToCart(description)}
         isInStock={isInStock(description)}
       />
@@ -105,18 +111,18 @@ const CartItem = ({
 );
 
 const Cart = ({
-  items,
+  cart,
   addToCart,
   removeFromCart,
-  emptyCart,
+  clearCart,
   isInStock,
 }): JSX.Element => (
   <div>
     <h1 className='text-center'>Cart</h1>
     <ListGroup variant='flush'>
-      {Object.entries(items).map(([description, quantity]) => (
+      {Object.entries(cart).map(([description, quantity]) => (
         <ListGroup.Item key={description}>
-          <CartItem
+          <CartItemVariant
             description={description}
             quantity={quantity}
             addToCart={addToCart}
@@ -128,10 +134,10 @@ const Cart = ({
     </ListGroup>
 
     <Row className='justify-content-center'>
-      <b>{`Total: ${getCartPrice(items)}`}</b>
+      <b>{`Total: ${getCartPrice(cart)}`}</b>
     </Row>
     <Row className='justify-content-center'>
-      <Button variant='outline-danger' size='sm' onClick={emptyCart}>
+      <Button variant='outline-danger' size='sm' onClick={clearCart}>
         Clear Cart
       </Button>
     </Row>
@@ -148,7 +154,7 @@ const Home = (): JSX.Element => {
     const newCart = removeFromCartPure(cart, item);
     setCart(newCart);
   };
-  const emptyCart = (): void => {
+  const clearCart = (): void => {
     setCart({});
   };
   const isInStock = (itemDescription): boolean =>
@@ -156,12 +162,16 @@ const Home = (): JSX.Element => {
 
   return (
     <div>
-      <Catalogue addToCart={addToThisCart} isInStock={isInStock} />
+      <Catalogue
+        items={catalogueItems}
+        addToCart={addToThisCart}
+        isInStock={isInStock}
+      />
       <Cart
-        items={cart}
+        cart={cart}
         addToCart={addToThisCart}
         removeFromCart={removeFromThisCart}
-        emptyCart={emptyCart}
+        clearCart={clearCart}
         isInStock={isInStock}
       />
     </div>
