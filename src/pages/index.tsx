@@ -8,7 +8,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { products, getBrand, isInStockGivenCart } from '../data';
 import { addToCartPure, removeFromCartPure, priceToString } from '../utilities';
-import { getCartPrice } from '../utilities/cart.utils';
+import { getCartPrice, getItemPriceString } from '../utilities/cart.utils';
 
 const Product = ({
   title,
@@ -79,6 +79,7 @@ const CartItem = ({
     <Col>
       <b>{`${quantity} ${description}`}</b>
       <div>{getBrand(description)}</div>
+      <i>{getItemPriceString(description)}</i>
     </Col>
     <ButtonGroup>
       <ButtonDecrementItem
@@ -119,10 +120,9 @@ const Cart = ({
         </ListGroup.Item>
       ))}
     </ListGroup>
-    <h5>
-      {'Total: '}
-      <b>{getCartPrice(items)}</b>
-    </h5>
+    <div>
+      <b>{`Total: ${getCartPrice(items)}`}</b>
+    </div>
   </div>
 );
 

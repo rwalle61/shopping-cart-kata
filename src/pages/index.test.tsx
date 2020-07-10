@@ -49,9 +49,7 @@ describe('Home page', () => {
       expect(screen.getByText('Cart')).toBeInTheDocument();
     });
     it('renders the default cart price (£0.00)', () => {
-      const cart = getCart();
-      expect(within(cart).getByText('Total:')).toBeInTheDocument();
-      expect(within(cart).getByText('£0.00')).toBeInTheDocument();
+      expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
     });
     it('renders the default products in the catalogue', () => {
       const catalogueProducts = [
@@ -108,6 +106,7 @@ describe('Home page', () => {
   describe('when user adds an item to the cart', () => {
     it('renders that item in the cart with details and buttons', async () => {
       const productBrand = 'Michael Belhadi';
+      const productVariantPrice = '£30.00';
       const catalogueItem = await openDropDownAndGetCatalogueItem(
         productTitle,
         productVariant,
@@ -121,6 +120,9 @@ describe('Home page', () => {
 
       const cartItem = cartItemTitle.parentElement.parentElement;
       expect(within(cartItem).getByText(productBrand)).toBeInTheDocument();
+      expect(
+        within(cartItem).getByText(productVariantPrice),
+      ).toBeInTheDocument();
 
       const [button1, button2] = within(cartItem).getAllByRole('button');
       expect(button1).toHaveTextContent('-');
@@ -146,9 +148,7 @@ describe('Home page', () => {
 
       userEvent.click(catalogueItem);
 
-      const cart = getCart();
-      expect(within(cart).getByText('Total:')).toBeInTheDocument();
-      expect(within(cart).getByText('£30.00')).toBeInTheDocument();
+      expect(screen.getByText('Total: £30.00')).toBeInTheDocument();
     });
     it('renders a button to add more of an item to the cart', async () => {
       const catalogueItem = await openDropDownAndGetCatalogueItem(
@@ -164,8 +164,7 @@ describe('Home page', () => {
       const newCart = getCart();
       const newCartItemTitle = within(newCart).getByText(`2 ${productVariant}`);
       expect(newCartItemTitle).toBeInTheDocument();
-      expect(within(newCart).getByText('Total:')).toBeInTheDocument();
-      expect(within(newCart).getByText('£60.00')).toBeInTheDocument();
+      expect(screen.getByText('Total: £60.00')).toBeInTheDocument();
     });
   });
   describe('when user removes an item from the cart', () => {
@@ -188,8 +187,7 @@ describe('Home page', () => {
           new RegExp(productVariant),
         );
         expect(newCartItemTitle).toBeNull();
-        expect(within(newCart).getByText('Total:')).toBeInTheDocument();
-        expect(within(newCart).getByText('£0.00')).toBeInTheDocument();
+        expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
       });
     });
     describe('when the cart contains multiples of the item', () => {
@@ -212,8 +210,7 @@ describe('Home page', () => {
           `1 ${productVariant}`,
         );
         expect(newCartItemTitle).toBeInTheDocument();
-        expect(within(newCart).getByText('Total:')).toBeInTheDocument();
-        expect(within(newCart).getByText('£30.00')).toBeInTheDocument();
+        expect(screen.getByText('Total: £30.00')).toBeInTheDocument();
       });
     });
   });
@@ -234,8 +231,7 @@ describe('Home page', () => {
         new RegExp(productVariant),
       );
       expect(newCartItemTitle).toBeNull();
-      expect(within(newCart).getByText('Total:')).toBeInTheDocument();
-      expect(within(newCart).getByText('£0.00')).toBeInTheDocument();
+      expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
     });
   });
   describe('when an item runs out of stock', () => {

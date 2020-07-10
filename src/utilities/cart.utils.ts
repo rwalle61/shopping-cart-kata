@@ -11,4 +11,7 @@ export const priceItems = (items): number =>
     0,
   );
 
+export const getItemPriceString = (description: string): string =>
+  priceToString(getItemPrice(description));
+
 export const getCartPrice = (items): string => priceToString(priceItems(items));
