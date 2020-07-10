@@ -1,37 +1,84 @@
-import * as data from '.';
+import {
+  findItem,
+  getItemBrand,
+  isVariantInStock,
+  getItems,
+  priceItemVariant,
+  priceItemVariants,
+} from './item.utils';
 
-describe('data', () => {
+describe('item.utils', () => {
   describe('findItem', () => {
     it('returns the correct item', () => {
-      const item = data.findItem('Jungle Art Print Unframed A4');
+      const item = findItem('Jungle Art Print Unframed A4');
       expect(item.title).toEqual('Jungle Art Print Unframed');
     });
   });
-  describe('getBrand', () => {
+  describe('getItemBrand', () => {
     it('returns the correct brand', () => {
-      expect(data.getBrand('Jungle Art Print Unframed A4')).toEqual(
+      expect(getItemBrand('Jungle Art Print Unframed A4')).toEqual(
         'Michael Belhadi',
       );
     });
   });
-  describe('isInStockGivenCart', () => {
+  describe('isVariantInStock', () => {
     const itemVariantDescription = 'Jungle Art Print Unframed A3';
     const itemVariantStock = 4;
-    it('returns true when the item has remaining stock', () => {
+    it('returns true when the item variant has remaining stock', () => {
       const cart = { [itemVariantDescription]: itemVariantStock - 1 };
-      expect(data.isInStockGivenCart(itemVariantDescription, cart)).toBe(true);
+      expect(isVariantInStock(itemVariantDescription, cart)).toBe(true);
     });
-    it('returns false when the item does not have remaining stock', () => {
+    it('returns false when the item variant does not have remaining stock', () => {
       const cart = { [itemVariantDescription]: itemVariantStock };
-      expect(data.isInStockGivenCart(itemVariantDescription, cart)).toBe(false);
+      expect(isVariantInStock(itemVariantDescription, cart)).toBe(false);
     });
-    it('returns true when the item is not in the cart', () => {
-      expect(data.isInStockGivenCart(itemVariantDescription, {})).toBe(true);
+    it('returns true when the item variant is not in the cart', () => {
+      expect(isVariantInStock(itemVariantDescription, {})).toBe(true);
+    });
+    it('throws an error when the item variant is not in the catalogue', () => {
+      expect(() => isVariantInStock('unknownVariant', {})).toThrow(
+        'Unknown item variant: unknownVariant',
+      );
     });
   });
-  describe('items', () => {
-    it('returns a summary of the default items', () => {
-      expect(data.items).toMatchInlineSnapshot(`
+  describe('priceItemVariant', () => {
+    it('prices an item variant correctly', () => {
+      expect(priceItemVariant('Jungle Art Print Unframed A4', 1)).toEqual(30);
+    });
+    it('prices a different item variant correctly', () => {
+      expect(priceItemVariant('Jungle Art Print Unframed A2', 1)).toEqual(50);
+    });
+  });
+  describe('priceItemVariants', () => {
+    it('prices an empty cart at 0', () => {
+      expect(priceItemVariants([])).toEqual(0);
+    });
+    it('prices 1 item variant', () => {
+      expect(
+        priceItemVariants([
+          { description: 'Jungle Art Print Unframed A4', quantity: 1 },
+        ]),
+      ).toEqual(30);
+    });
+    it('prices multiple of the same item variant', () => {
+      expect(
+        priceItemVariants([
+          { description: 'Jungle Art Print Unframed A4', quantity: 3 },
+        ]),
+      ).toEqual(30 * 3);
+    });
+    it('prices multiple different items', () => {
+      expect(
+        priceItemVariants([
+          { description: 'Jungle Art Print Unframed A4', quantity: 1 },
+          { description: 'Jungle Art Print Unframed A2', quantity: 1 },
+        ]),
+      ).toEqual(30 + 50);
+    });
+  });
+  describe('getItems', () => {
+    it('returns the default items', () => {
+      expect(getItems()).toMatchInlineSnapshot(`
         Array [
           Object {
             "brand": "Michael Belhadi",

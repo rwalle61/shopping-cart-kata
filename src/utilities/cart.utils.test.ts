@@ -1,40 +1,68 @@
-import { priceItem, priceItems, getCartPrice } from './cart.utils';
+import {
+  addToCart,
+  removeFromCart,
+  priceCart,
+  getItemCartStates,
+} from './cart.utils';
 
-describe('Cart.utils', () => {
-  describe('priceItem', () => {
-    it('prices an item correctly', () => {
-      expect(priceItem('Jungle Art Print Unframed A4', 1)).toEqual(30);
+describe('cart.utils', () => {
+  describe('addToCart', () => {
+    it('adds a new item to the cart', () => {
+      expect(addToCart({}, 'a')).toEqual({ a: 1 });
     });
-    it('prices a different item correctly', () => {
-      expect(priceItem('Jungle Art Print Unframed A2', 1)).toEqual(50);
+    it('increments an existing item', () => {
+      expect(addToCart({ a: 1 }, 'a')).toEqual({ a: 2 });
+    });
+    it('increments the correct existing item', () => {
+      expect(
+        addToCart(
+          {
+            a: 1,
+            b: 1,
+            c: 1,
+          },
+          'b',
+        ),
+      ).toEqual({
+        a: 1,
+        b: 2,
+        c: 1,
+      });
     });
   });
-  describe('priceItems', () => {
-    it('prices an empty cart at 0', () => {
-      expect(priceItems({})).toEqual(0);
+  describe('removeFromCart', () => {
+    it('removes nothing from an empty cart', () => {
+      expect(removeFromCart({}, 'a')).toEqual({});
     });
-    it('prices 1 item', () => {
-      expect(priceItems({ 'Jungle Art Print Unframed A4': 1 })).toEqual(30);
+    it('removes nothing when item is not in cart', () => {
+      expect(removeFromCart({ a: 1 }, 'b')).toEqual({ a: 1 });
     });
-    it('prices multiple of the same item', () => {
-      expect(
-        priceItems({
-          'Jungle Art Print Unframed A4': 3,
-        }),
-      ).toEqual(30 * 3);
+    it('removes an item from the cart when there is only 1 of it in the cart', () => {
+      expect(removeFromCart({ a: 1 }, 'a')).toEqual({});
     });
-    it('prices multiple different items', () => {
-      expect(
-        priceItems({
-          'Jungle Art Print Unframed A4': 1,
-          'Jungle Art Print Unframed A2': 1,
-        }),
-      ).toEqual(30 + 50);
+    it('removes the correct item from the cart when there is only 1 of it in the cart', () => {
+      expect(removeFromCart({ a: 1, b: 1, c: 1 }, 'b')).toEqual({
+        a: 1,
+        c: 1,
+      });
+    });
+    it('decrements the quantity of an item when there are multiples of it in the cart', () => {
+      expect(removeFromCart({ a: 3 }, 'a')).toEqual({ a: 2 });
     });
   });
-  describe('getCartPrice', () => {
+  describe('priceCart', () => {
     it('prices an empty cart at £0.00', () => {
-      expect(getCartPrice({})).toEqual('£0.00');
+      expect(priceCart({})).toEqual('£0.00');
+    });
+  });
+  describe('getItemCartStates', () => {
+    it('returns []', () => {
+      expect(getItemCartStates({})).toEqual([]);
+    });
+    it('returns an item cart states as an array', () => {
+      expect(getItemCartStates({ a: 1 })).toEqual([
+        { description: 'a', quantity: 1 },
+      ]);
     });
   });
 });

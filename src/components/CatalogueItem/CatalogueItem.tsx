@@ -2,8 +2,8 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { priceToString } from '../../utilities';
-import { getImageSrc } from '../../data';
+import { priceToString } from '../../utilities/common.utils';
+import { getImageSrc } from '../../utilities/item.utils';
 import Image from '../../elements/Image';
 
 const CatalogueItem = ({
@@ -11,7 +11,7 @@ const CatalogueItem = ({
   brand,
   variants,
   addToCart,
-  isInStock,
+  isVariantInStock,
 }): JSX.Element => (
   <Row>
     <Col xs={3} sm={2} md={2}>
@@ -26,10 +26,12 @@ const CatalogueItem = ({
         <Dropdown.Item
           key={description}
           onClick={(): void => addToCart(description)}
-          disabled={!isInStock(description)}
+          disabled={!isVariantInStock(description)}
         >
           <div>
-            {`${isInStock(description) ? '' : '[OUT OF STOCK] '}${description}`}
+            {`${
+              isVariantInStock(description) ? '' : '[OUT OF STOCK] '
+            }${description}`}
           </div>
           <div>{priceToString(price)}</div>
         </Dropdown.Item>

@@ -2,16 +2,20 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { getImageSrc, getBrand } from '../../data';
-import { getItemVariantPriceString } from '../../utilities/cart.utils';
+import {
+  getImageSrc,
+  getItemBrand,
+  priceItemVariant,
+} from '../../utilities/item.utils';
+import { priceToString } from '../../utilities/common.utils';
 import Image from '../../elements/Image';
 
 const DecrementButton = ({ removeFromCart }): JSX.Element => (
   <Button onClick={removeFromCart}>-</Button>
 );
 
-const IncrementButton = ({ addToCart, isInStock }): JSX.Element => (
-  <Button onClick={addToCart} disabled={!isInStock}>
+const IncrementButton = ({ addToCart, isVariantInStock }): JSX.Element => (
+  <Button onClick={addToCart} disabled={!isVariantInStock}>
     +
   </Button>
 );
@@ -21,7 +25,7 @@ const CartItemVariant = ({
   quantity,
   addToCart,
   removeFromCart,
-  isInStock,
+  isVariantInStock,
 }): JSX.Element => (
   <Row>
     <Col xs={3} sm={2} md={2}>
@@ -29,8 +33,8 @@ const CartItemVariant = ({
     </Col>
     <Col>
       <b>{`${quantity} ${description}`}</b>
-      <div>{getBrand(description)}</div>
-      <i>{getItemVariantPriceString(description)}</i>
+      <div>{getItemBrand(description)}</div>
+      <i>{priceToString(priceItemVariant(description, quantity))}</i>
     </Col>
     <ButtonGroup>
       <DecrementButton
@@ -38,7 +42,7 @@ const CartItemVariant = ({
       />
       <IncrementButton
         addToCart={(): void => addToCart(description)}
-        isInStock={isInStock(description)}
+        isVariantInStock={isVariantInStock(description)}
       />
     </ButtonGroup>
   </Row>

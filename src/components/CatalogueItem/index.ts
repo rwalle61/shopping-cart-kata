@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { addToCart } from '../../actions';
-import { isInStockGivenCart } from '../../data/index';
+import { isVariantInStock } from '../../utilities/item.utils';
 import CatalogueItem from './CatalogueItem';
 
 const mapStateToProps = (state): object => ({
-  isInStock: (itemDescription): boolean =>
-    isInStockGivenCart(itemDescription, state.cart),
+  isVariantInStock: (itemDescription): boolean =>
+    isVariantInStock(itemDescription, state.cart),
 });
 
 const mapDispatchToProps = (dispatch): object => ({

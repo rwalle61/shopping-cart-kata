@@ -1,7 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import { getCartPrice } from '../../utilities/cart.utils';
+import { priceCart } from '../../utilities/cart.utils';
 import CartItemVariant from '../CartItemVariant';
 
 const ClearCartButton = ({ clearCart }): JSX.Element => (
@@ -21,7 +21,7 @@ const Cart = ({ cart, clearCart }): JSX.Element => (
       ))}
     </ListGroup>
     <Row className='justify-content-center'>
-      <b>{`Total: ${getCartPrice(cart)}`}</b>
+      <b>{`Total: ${priceCart(cart)}`}</b>
     </Row>
     <Row className='justify-content-center'>
       <ClearCartButton clearCart={clearCart} />
