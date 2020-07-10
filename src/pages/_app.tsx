@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles.css';
 
 const MyApp = ({ Component, pageProps }: AppProps): any => (
   // eslint-disable-next-line react/jsx-props-no-spreading

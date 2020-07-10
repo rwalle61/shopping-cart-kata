@@ -29,8 +29,7 @@ const openDropDownAndGetCatalogueItem = async (
   return getCatalogueItem(_productVariant);
 };
 
-const getCart = (): HTMLElement =>
-  screen.getByText('Cart').parentElement.parentElement;
+const getCart = (): HTMLElement => screen.getByText('Cart').parentElement;
 
 const getCartItem = (matcher): HTMLElement => {
   const cartItemTitle = within(getCart()).getByText(matcher);
@@ -230,7 +229,9 @@ describe('Home page', () => {
       userEvent.click(catalogueItem);
 
       const cart = getCart();
-      const emptyCartButton = within(cart).getByText('X').closest('button');
+      const emptyCartButton = within(cart)
+        .getByText('Clear Cart')
+        .closest('button');
       userEvent.click(emptyCartButton);
 
       const newCart = getCart();

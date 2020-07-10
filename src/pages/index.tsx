@@ -11,7 +11,9 @@ import { products, getBrand, isInStockGivenCart, getImageSrc } from '../data';
 import { addToCartPure, removeFromCartPure, priceToString } from '../utilities';
 import { getCartPrice, getItemPriceString } from '../utilities/cart.utils';
 
-const ProductImage = ({ src }): JSX.Element => <Image src={src} fluid rounded />;
+const ProductImage = ({ src }): JSX.Element => (
+  <Image src={src} fluid rounded />
+);
 
 const Product = ({
   title,
@@ -21,7 +23,7 @@ const Product = ({
   isInStock,
 }): JSX.Element => (
   <Row>
-    <Col xs={3}>
+    <Col xs={3} sm={2} md={2}>
       <ProductImage src={getImageSrc(title)} />
     </Col>
     <Col>
@@ -47,7 +49,7 @@ const Product = ({
 
 const Catalogue = ({ addToCart, isInStock }): JSX.Element => (
   <div>
-    <h2>Catalogue</h2>
+    <h1 className='text-center'>Catalogue</h1>
     <ListGroup variant='flush'>
       {products.map(({ title, brand, variants }) => (
         <ListGroup.Item key={title}>
@@ -82,7 +84,7 @@ const CartItem = ({
   isInStock,
 }): JSX.Element => (
   <Row>
-    <Col xs={3}>
+    <Col xs={3} sm={2} md={2}>
       <ProductImage src={getImageSrc(description)} />
     </Col>
     <Col>
@@ -110,12 +112,7 @@ const Cart = ({
   isInStock,
 }): JSX.Element => (
   <div>
-    <Row>
-      <h2>Cart</h2>
-      <Button variant='outline-danger' size='sm' onClick={emptyCart}>
-        X
-      </Button>
-    </Row>
+    <h1 className='text-center'>Cart</h1>
     <ListGroup variant='flush'>
       {Object.entries(items).map(([description, quantity]) => (
         <ListGroup.Item key={description}>
@@ -129,9 +126,15 @@ const Cart = ({
         </ListGroup.Item>
       ))}
     </ListGroup>
-    <div>
+
+    <Row className='justify-content-center'>
       <b>{`Total: ${getCartPrice(items)}`}</b>
-    </div>
+    </Row>
+    <Row className='justify-content-center'>
+      <Button variant='outline-danger' size='sm' onClick={emptyCart}>
+        Clear Cart
+      </Button>
+    </Row>
   </div>
 );
 
