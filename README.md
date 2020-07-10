@@ -53,6 +53,11 @@ yarn install
 ### Run the app
 
 ```bash
+# dev mode
+yarn dev
+
+# production
+yarn build
 yarn start
 ```
 
