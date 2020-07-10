@@ -14,12 +14,12 @@ module.exports = {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     '\\.(gif|ttf|eot|svg|png)$': '<rootDir>/test/__mocks__/fileMock.js',
   },
-  // coverageThreshold: {
-  //   global: {
-  //     branches: 97,
-  //     functions: 97,
-  //     lines: 97,
-  //     statements: 97,
-  //   },
-  // },
+  coverageThreshold: {
+    global: {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
+  },
 };
