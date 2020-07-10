@@ -1,48 +1,73 @@
-# NextJS Typescript Boilerplate
+# Shopping Cart Kata
 
-Bootstrap a developer-friendly NextJS app configured with:
+Try it out at https://shoppingkata.vercel.app/
 
-- [Typescript](https://www.typescriptlang.org/)
-- Linting with [ESLint](https://eslint.org/)
-- Formatting with [Prettier](https://prettier.io/)
-- Linting, typechecking and formatting on by default using [`husky`](https://github.com/typicode/husky) for commit hooks
-- Testing with [Jest](https://jestjs.io/) and [`react-testing-library`](https://testing-library.com/docs/react-testing-library/intro)
+## Table of Contents
 
-## Deploy your own
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+- [Running the Tests](#running-the-tests)
 
-Deploy the example using [Vercel](https://vercel.com):
+## Overview
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/project?template=https://github.com/vercel/next.js/tree/canary/examples/with-typescript-eslint-jest)
+This is a simple ReactJS/NextJS front-end that allows a user to view some products and interact with a shopping cart as follows:
 
-## How to use
+- see products and their details
+- add a product to their shopping cart
+- see products in their shopping cart
+- remove one product from their cart
+- remove all products from their cart with a single action
+- increase and decrease the quantity of an item in the cart
 
-### Using `create-next-app`
+I have:
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+1. used a clean folder structure
+2. used Create Next App (instead of Create React App)
+3. used `/products.json` to build the product catalogue
+4. used React Bootstrap
+5. used TDD (see the git history), and included both e2e and unit tests. As the complexity of this task was mainly in the effects of the add/remove items buttons, I mainly used integration tests to be confident about these interactions. I unit tested key functions where useful. I did all this using Jest and React Testing Library, and did not feel Cypress would add anything on top of those e2e tests. If the project were to grow, however, they would probably come in use.
+6. included TypeScript types and interfaces.
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+[Download Node.js v8 or above](https://github.com/nodejs/node#download)
+
+### Installing
+
+Clone the repo
 
 ```bash
-npx create-next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
-# or
-yarn create next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
+git clone git@github.com:rwalle61/shopping-cart-kata.git
 ```
 
-### Download manually
-
-Download the example:
+Install dependencies
 
 ```bash
-curl https://codeload.github.com/vercel/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/with-typescript-eslint-jest
-cd with-typescript-eslint-jest
+yarn install
 ```
 
-Install it and run:
+### Run the app
 
 ```bash
-npm install
-npm run dev
-# or
-yarn
-yarn dev
+yarn start
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/import?filter=next.js&utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+The app will be running at `http://localhost:3000`.
+
+## Running the Tests
+
+### Jest watch mode
+
+```bash
+yarn test
+```
+
+### All tests
+
+```bash
+yarn test:ci
+```
