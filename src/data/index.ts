@@ -1,16 +1,32 @@
 import productsJson from './product.json';
 
-export const items = productsJson.map((product) => ({
-  title: product.title,
-  brand: product.brand.name,
-  variants: product.skus,
-  image: product.image,
-}));
+interface ItemVariant {
+  description: string;
+  id: string;
+  price: number;
+  stock: number;
+}
 
-export const findItem = (description: string): any =>
+interface Item {
+  title: string;
+  brand: string;
+  variants: ItemVariant[];
+  image: string;
+}
+
+export const items = productsJson.map(
+  (product): Item => ({
+    title: product.title,
+    brand: product.brand.name,
+    variants: product.skus,
+    image: product.image,
+  }),
+);
+
+export const findItem = (description: string): Item =>
   items.find((product) => description.includes(product.title));
 
-const findItemVariant = (description: string): any => {
+const findItemVariant = (description: string): ItemVariant => {
   // eslint-disable-next-line no-restricted-syntax
   for (const item of items) {
     const foundVariant = item.variants.find(

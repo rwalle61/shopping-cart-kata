@@ -1,8 +1,12 @@
 import { ADD_TO_CART, REMOVE_FROM_CART, CLEAR_CART } from '../actions';
 
-const defaultState = {};
+interface Cart {
+  [itemDescription: string]: number;
+}
 
-export const addToCart = (cart, itemDescription): object => {
+const defaultState: Cart = {};
+
+export const addToCart = (cart, itemDescription): Cart => {
   const existingQuantity = Object.keys(cart).includes(itemDescription)
     ? cart[itemDescription]
     : 0;
@@ -13,7 +17,7 @@ export const addToCart = (cart, itemDescription): object => {
   return newCart;
 };
 
-export const removeFromCart = (cart, itemDescription): object => {
+export const removeFromCart = (cart, itemDescription): Cart => {
   if (!Object.keys(cart).includes(itemDescription)) {
     return cart;
   }
@@ -30,9 +34,9 @@ export const removeFromCart = (cart, itemDescription): object => {
   return newCart;
 };
 
-export const clearCart = (): object => ({ ...defaultState });
+export const clearCart = (): Cart => ({ ...defaultState });
 
-const cart = (state = defaultState, action): object => {
+const cart = (state = defaultState, action): Cart => {
   switch (action.type) {
     case ADD_TO_CART:
       return addToCart(state, action.payload.itemDescription);
