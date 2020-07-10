@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '../test-utils';
 import Home from '.';
 
 const itemTitle = 'Jungle Art Print Unframed';
@@ -222,7 +222,7 @@ describe('Home page', () => {
       });
     });
   });
-  describe('when user empties the cart', () => {
+  describe('when user clears the cart with one action', () => {
     it('removes all items and resets the cart price to 0', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         itemTitle,
