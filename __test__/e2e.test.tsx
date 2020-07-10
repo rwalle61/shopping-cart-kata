@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
-import { render, screen, within } from '../test-utils';
-import Home from '.';
+import { render, screen, within } from './test-utils';
+import App from '../src/pages';
 
 const itemTitle = 'Jungle Art Print Unframed';
 const itemVariantDesc = `${itemTitle} A4`;
@@ -37,9 +37,9 @@ const getCartItemVariant = (descriptionMatcher): HTMLElement => {
   return variantDescription.parentElement.parentElement;
 };
 
-describe('Home page', () => {
+describe('e2e tests', () => {
   beforeEach(() => {
-    render(<Home />);
+    render(<App />);
   });
   describe('when app starts', () => {
     it('renders the catalogue title', () => {
