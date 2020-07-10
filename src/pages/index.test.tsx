@@ -13,10 +13,11 @@ const getCatalogueItem = (matcher): HTMLElement => {
 };
 
 const openDropdown = async (matcher): Promise<HTMLElement> => {
-  const productElement = screen.getByText(matcher).parentElement;
+  const productElement = screen.getByText(matcher).parentElement.parentElement;
   const addToCartDropdown = within(productElement).getByText('Add to Cart');
   userEvent.click(addToCartDropdown);
-  const newProductElement = (await screen.findByText(matcher)).parentElement;
+  const newProductElement = (await screen.findByText(matcher)).parentElement
+    .parentElement;
   return newProductElement;
 };
 
@@ -28,10 +29,12 @@ const openDropDownAndGetCatalogueItem = async (
   return getCatalogueItem(_productVariant);
 };
 
+const getCart = (): HTMLElement =>
+  screen.getByText('Cart').parentElement.parentElement;
+
 const getCartItem = (matcher): HTMLElement => {
-  const cart = screen.getByText('Cart').parentElement;
-  const cartItemTitle = within(cart).getByText(matcher);
-  return cartItemTitle.parentElement;
+  const cartItemTitle = within(getCart()).getByText(matcher);
+  return cartItemTitle.parentElement.parentElement;
 };
 
 describe('Home page', () => {
@@ -46,8 +49,9 @@ describe('Home page', () => {
       expect(screen.getByText('Cart')).toBeInTheDocument();
     });
     it('renders the default cart price (£0.00)', () => {
-      expect(screen.getByText('Total:')).toBeInTheDocument();
-      expect(screen.getByText('£0.00')).toBeInTheDocument();
+      const cart = getCart();
+      expect(within(cart).getByText('Total:')).toBeInTheDocument();
+      expect(within(cart).getByText('£0.00')).toBeInTheDocument();
     });
     it('renders the default products in the catalogue', () => {
       const catalogueProducts = [
@@ -79,17 +83,17 @@ describe('Home page', () => {
         (size) => `${productWithMultipleVariants} ${size}`,
       );
       const productVariantPrices = [30, 40, 50, 60, 120].map(
-        (price) => `${price}`,
+        (price) => `£${price}.00`,
       );
 
       const productElement = screen.getByText(productWithMultipleVariants)
-        .parentElement;
+        .parentElement.parentElement;
       const addToCartDropdown = within(productElement).getByText('Add to Cart');
       userEvent.click(addToCartDropdown);
 
       const newProductElement = (
         await screen.findByText(productWithMultipleVariants)
-      ).parentElement;
+      ).parentElement.parentElement;
       productVariants.forEach((variant, i) => {
         const variantDescription = within(newProductElement).getByText(variant);
         expect(variantDescription).toBeInTheDocument();
@@ -111,11 +115,11 @@ describe('Home page', () => {
 
       userEvent.click(catalogueItem);
 
-      const cart = screen.getByText('Cart').parentElement;
+      const cart = getCart();
       const cartItemTitle = within(cart).getByText(`1 ${productVariant}`);
       expect(cartItemTitle).toBeInTheDocument();
 
-      const cartItem = cartItemTitle.parentElement;
+      const cartItem = cartItemTitle.parentElement.parentElement;
       expect(within(cartItem).getByText(productBrand)).toBeInTheDocument();
 
       const [button1, button2] = within(cartItem).getAllByRole('button');
@@ -131,7 +135,7 @@ describe('Home page', () => {
       userEvent.click(catalogueItem);
       userEvent.click(catalogueItem);
 
-      const cart = screen.getByText('Cart').parentElement;
+      const cart = getCart();
       expect(within(cart).getByText(`2 ${productVariant}`)).toBeInTheDocument();
     });
     it('updates the cart price', async () => {
@@ -142,8 +146,9 @@ describe('Home page', () => {
 
       userEvent.click(catalogueItem);
 
-      expect(screen.getByText('Total:')).toBeInTheDocument();
-      expect(screen.getByText('£30.00')).toBeInTheDocument();
+      const cart = getCart();
+      expect(within(cart).getByText('Total:')).toBeInTheDocument();
+      expect(within(cart).getByText('£30.00')).toBeInTheDocument();
     });
     it('renders a button to add more of an item to the cart', async () => {
       const catalogueItem = await openDropDownAndGetCatalogueItem(
@@ -156,11 +161,11 @@ describe('Home page', () => {
       const incrementButton = within(cartItem).getByText('+').closest('button');
       userEvent.click(incrementButton);
 
-      const newCart = screen.getByText('Cart').parentElement;
+      const newCart = getCart();
       const newCartItemTitle = within(newCart).getByText(`2 ${productVariant}`);
       expect(newCartItemTitle).toBeInTheDocument();
-      expect(screen.getByText('Total:')).toBeInTheDocument();
-      expect(screen.getByText('£60.00')).toBeInTheDocument();
+      expect(within(newCart).getByText('Total:')).toBeInTheDocument();
+      expect(within(newCart).getByText('£60.00')).toBeInTheDocument();
     });
   });
   describe('when user removes an item from the cart', () => {
@@ -178,13 +183,13 @@ describe('Home page', () => {
           .closest('button');
         userEvent.click(decrementButton);
 
-        const newCart = screen.getByText('Cart').parentElement;
+        const newCart = getCart();
         const newCartItemTitle = within(newCart).queryByText(
           new RegExp(productVariant),
         );
         expect(newCartItemTitle).toBeNull();
-        expect(screen.getByText('Total:')).toBeInTheDocument();
-        expect(screen.getByText('£0.00')).toBeInTheDocument();
+        expect(within(newCart).getByText('Total:')).toBeInTheDocument();
+        expect(within(newCart).getByText('£0.00')).toBeInTheDocument();
       });
     });
     describe('when the cart contains multiples of the item', () => {
@@ -202,13 +207,13 @@ describe('Home page', () => {
           .closest('button');
         userEvent.click(decrementButton);
 
-        const newCart = screen.getByText('Cart').parentElement;
+        const newCart = getCart();
         const newCartItemTitle = within(newCart).getByText(
           `1 ${productVariant}`,
         );
         expect(newCartItemTitle).toBeInTheDocument();
-        expect(screen.getByText('Total:')).toBeInTheDocument();
-        expect(screen.getByText('£30.00')).toBeInTheDocument();
+        expect(within(newCart).getByText('Total:')).toBeInTheDocument();
+        expect(within(newCart).getByText('£30.00')).toBeInTheDocument();
       });
     });
   });
@@ -220,19 +225,17 @@ describe('Home page', () => {
       );
       userEvent.click(catalogueItem);
 
-      const cart = screen.getByText('Cart').parentElement;
-      const emptyCartButton = within(cart)
-        .getByText('Empty Cart')
-        .closest('button');
+      const cart = getCart();
+      const emptyCartButton = within(cart).getByText('X').closest('button');
       userEvent.click(emptyCartButton);
 
-      const newCart = screen.getByText('Cart').parentElement;
+      const newCart = getCart();
       const newCartItemTitle = within(newCart).queryByText(
         new RegExp(productVariant),
       );
       expect(newCartItemTitle).toBeNull();
-      expect(screen.getByText('Total:')).toBeInTheDocument();
-      expect(screen.getByText('£0.00')).toBeInTheDocument();
+      expect(within(newCart).getByText('Total:')).toBeInTheDocument();
+      expect(within(newCart).getByText('£0.00')).toBeInTheDocument();
     });
   });
   describe('when an item runs out of stock', () => {
@@ -249,7 +252,7 @@ describe('Home page', () => {
 
       expect(catalogueItem).toHaveTextContent(/\[OUT OF STOCK\]/);
 
-      const cart = screen.getByText('Cart').parentElement;
+      const cart = getCart();
       const cartItemTitle = within(cart).queryByText(
         new RegExp(outOfStockVariant),
       );

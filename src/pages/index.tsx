@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { products, getBrand, isInStockGivenCart } from '../data';
-import { addToCartPure, removeFromCartPure } from '../utilities';
+import { addToCartPure, removeFromCartPure, priceToString } from '../utilities';
 import { getCartPrice } from '../utilities/cart.utils';
 
 const Product = ({
@@ -15,9 +17,11 @@ const Product = ({
   addToCart,
   isInStock,
 }): JSX.Element => (
-  <div>
-    <b>{title}</b>
-    <div>{brand}</div>
+  <Row>
+    <Col>
+      <b>{title}</b>
+      <div>{brand}</div>
+    </Col>
     <DropdownButton title='Add to Cart' size='sm'>
       {variants.map(({ description, price }) => (
         <Dropdown.Item
@@ -28,11 +32,11 @@ const Product = ({
           <div>
             {`${isInStock(description) ? '' : '[OUT OF STOCK] '}${description}`}
           </div>
-          <div>{price}</div>
+          <div>{priceToString(price)}</div>
         </Dropdown.Item>
       ))}
     </DropdownButton>
-  </div>
+  </Row>
 );
 
 const Catalogue = ({ addToCart, isInStock }): JSX.Element => (
@@ -72,15 +76,19 @@ const CartItem = ({
   isInStock,
 }): JSX.Element => (
   <Row>
-    <b>{`${quantity} ${description}`}</b>
-    <div>{getBrand(description)}</div>
-    <ButtonDecrementItem
-      removeFromCart={(): void => removeFromCart(description)}
-    />
-    <ButtonIncrementItem
-      addToCart={(): void => addToCart(description)}
-      isInStock={isInStock(description)}
-    />
+    <Col>
+      <b>{`${quantity} ${description}`}</b>
+      <div>{getBrand(description)}</div>
+    </Col>
+    <ButtonGroup>
+      <ButtonDecrementItem
+        removeFromCart={(): void => removeFromCart(description)}
+      />
+      <ButtonIncrementItem
+        addToCart={(): void => addToCart(description)}
+        isInStock={isInStock(description)}
+      />
+    </ButtonGroup>
   </Row>
 );
 
@@ -92,8 +100,12 @@ const Cart = ({
   isInStock,
 }): JSX.Element => (
   <div>
-    <h2>Cart</h2>
-    <Button onClick={emptyCart}>Empty Cart</Button>
+    <Row>
+      <h2>Cart</h2>
+      <Button variant='outline-danger' size='sm' onClick={emptyCart}>
+        X
+      </Button>
+    </Row>
     <ListGroup variant='flush'>
       {Object.entries(items).map(([description, quantity]) => (
         <ListGroup.Item key={description}>
@@ -107,10 +119,10 @@ const Cart = ({
         </ListGroup.Item>
       ))}
     </ListGroup>
-    <div>
+    <h5>
       {'Total: '}
-      <b>{`£${getCartPrice(items)}`}</b>
-    </div>
+      <b>{getCartPrice(items)}</b>
+    </h5>
   </div>
 );
 

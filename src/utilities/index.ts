@@ -25,3 +25,5 @@ export const removeFromCartPure = (cart, itemDescription): object => {
       : rest;
   return newCart;
 };
+
+export const priceToString = (price: number): string => `£${price.toFixed(2)}`;

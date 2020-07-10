@@ -33,8 +33,8 @@ describe('Cart.utils', () => {
     });
   });
   describe('getCartPrice', () => {
-    it('prices an empty cart at 0.00', () => {
-      expect(getCartPrice({})).toEqual('0.00');
+    it('prices an empty cart at £0.00', () => {
+      expect(getCartPrice({})).toEqual('£0.00');
     });
   });
 });
