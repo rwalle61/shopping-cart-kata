@@ -5,7 +5,7 @@ import rootReducer from '../reducers';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 
-const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
+const CustomApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   const store = createStore(rootReducer);
   return (
     <Provider store={store}>
@@ -14,4 +14,4 @@ const MyApp = ({ Component, pageProps }: AppProps): JSX.Element => {
   );
 };
 
-export default MyApp;
+export default CustomApp;
