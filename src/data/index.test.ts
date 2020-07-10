@@ -35,6 +35,7 @@ describe('data', () => {
         Array [
           Object {
             "brand": "Michael Belhadi",
+            "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/93e15616/5d70e2f93d51575d590000b7.jpeg",
             "title": "Jungle Art Print Unframed",
             "variants": Array [
               Object {
@@ -71,6 +72,7 @@ describe('data', () => {
           },
           Object {
             "brand": "David Sparshott",
+            "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/e01f72b5/5d4a85d754d1780084000030.jpeg",
             "title": "Unframed Col Du Glandon Art Print",
             "variants": Array [
               Object {
@@ -107,6 +109,7 @@ describe('data', () => {
           },
           Object {
             "brand": "Michael Belhadi",
+            "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/93e15616/5d70e2f93d51575d590000db.jpeg",
             "title": "Mexico Art Print Unframed",
             "variants": Array [
               Object {
@@ -143,6 +146,7 @@ describe('data', () => {
           },
           Object {
             "brand": "Boris Draschoff",
+            "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/86b4edd1/5da74776f9b6b137860000c7.jpeg",
             "title": "Black Orchidee Art Print Unframed",
             "variants": Array [
               Object {
@@ -179,6 +183,7 @@ describe('data', () => {
           },
           Object {
             "brand": "Sternzeit ",
+            "image": "https://ik.imagekit.io/pimberly/5a8c13244d6da904d47144ba/616d37cf/5dde3085c70d3e2fa700005f.jpg",
             "title": "Lemon Cube Chair Copper",
             "variants": Array [
               Object {

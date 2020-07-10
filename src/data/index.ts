@@ -4,6 +4,7 @@ export const products = productsJson.map((product) => ({
   title: product.title,
   brand: product.brand.name,
   variants: product.skus,
+  image: product.image,
 }));
 
 export const findProduct = (description: string): any =>
@@ -39,3 +40,6 @@ export const isInStockGivenCart = (description: string, cart): boolean => {
   const item = findItem(description);
   return item.stock > quantityInCart;
 };
+
+export const getImageSrc = (matcher: string): string =>
+  findProduct(matcher).image;

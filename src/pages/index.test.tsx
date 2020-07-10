@@ -69,10 +69,14 @@ describe('Home page', () => {
       const catalogue = screen.getByText('Catalogue').parentElement;
 
       catalogueProducts.forEach((product, i) => {
-        const title = within(catalogue).getAllByText(product)[0];
+        const title = within(catalogue).getByText(product);
         expect(title).toBeInTheDocument();
-        const brand = within(title.parentElement).getByText(defaultBrands[i]);
+        const productElement = title.parentElement.parentElement;
+        const brand = within(productElement).getByText(defaultBrands[i]);
         expect(brand).toBeInTheDocument();
+        const img = within(productElement).getByRole('img');
+        expect(img).toBeInTheDocument();
+        expect(img).toHaveAttribute('src');
       });
     });
     it('renders dropdowns of product variants with descriptions and prices', async () => {
@@ -123,6 +127,9 @@ describe('Home page', () => {
       expect(
         within(cartItem).getByText(productVariantPrice),
       ).toBeInTheDocument();
+      const img = within(cartItem).getByRole('img');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src');
 
       const [button1, button2] = within(cartItem).getAllByRole('button');
       expect(button1).toHaveTextContent('-');

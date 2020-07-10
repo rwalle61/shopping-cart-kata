@@ -3,12 +3,15 @@ import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Image from 'react-bootstrap/Image';
 import ListGroup from 'react-bootstrap/ListGroup';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { products, getBrand, isInStockGivenCart } from '../data';
+import { products, getBrand, isInStockGivenCart, getImageSrc } from '../data';
 import { addToCartPure, removeFromCartPure, priceToString } from '../utilities';
 import { getCartPrice, getItemPriceString } from '../utilities/cart.utils';
+
+const ProductImage = ({ src }): JSX.Element => <Image src={src} fluid rounded />;
 
 const Product = ({
   title,
@@ -18,6 +21,9 @@ const Product = ({
   isInStock,
 }): JSX.Element => (
   <Row>
+    <Col xs={3}>
+      <ProductImage src={getImageSrc(title)} />
+    </Col>
     <Col>
       <b>{title}</b>
       <div>{brand}</div>
@@ -76,6 +82,9 @@ const CartItem = ({
   isInStock,
 }): JSX.Element => (
   <Row>
+    <Col xs={3}>
+      <ProductImage src={getImageSrc(description)} />
+    </Col>
     <Col>
       <b>{`${quantity} ${description}`}</b>
       <div>{getBrand(description)}</div>
