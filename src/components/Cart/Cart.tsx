@@ -1,7 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import { priceCart } from '../../utilities/cart.utils';
+import { priceCart, getItemCartStates } from '../../utilities/cart.utils';
 import CartItemVariant from '../CartItemVariant';
 
 const ClearCartButton = ({ clearCart }): JSX.Element => (
@@ -14,7 +14,7 @@ const Cart = ({ cart, clearCart }): JSX.Element => (
   <div>
     <h1 className='text-center'>Cart</h1>
     <ListGroup variant='flush'>
-      {Object.entries(cart).map(([description, quantity]) => (
+      {getItemCartStates(cart).map(({ description, quantity }) => (
         <ListGroup.Item key={description}>
           <CartItemVariant description={description} quantity={quantity} />
         </ListGroup.Item>
