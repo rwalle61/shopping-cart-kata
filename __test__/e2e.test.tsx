@@ -41,17 +41,17 @@ describe('e2e tests', () => {
   beforeEach(() => {
     render(<App />);
   });
-  describe('when app starts', () => {
-    it('renders the catalogue title', () => {
+  describe('when user loads the home page', () => {
+    test('user sees the catalogue title', () => {
       expect(screen.getByText('Catalogue')).toBeInTheDocument();
     });
-    it('renders the cart title', () => {
+    test('user sees the cart title', () => {
       expect(screen.getByText('Cart')).toBeInTheDocument();
     });
-    it('renders the default cart price (£0.00)', () => {
+    test('user sees the default cart price (£0.00)', () => {
       expect(screen.getByText('Total: £0.00')).toBeInTheDocument();
     });
-    it('renders the default catalogue items', () => {
+    test('user sees the default items', () => {
       const itemTitles = [
         'Jungle Art Print Unframed',
         'Unframed Col Du Glandon Art Print',
@@ -79,7 +79,7 @@ describe('e2e tests', () => {
         expect(img).toHaveAttribute('src');
       });
     });
-    it('renders dropdowns of item variants with descriptions and prices', async () => {
+    test('user can click dropdowns to see item variants and their details', async () => {
       const variantDescriptions = ['A4', 'A3', 'A2', 'A1', 'A0'].map(
         (size) => `${itemTitle} ${size}`,
       );
@@ -103,7 +103,7 @@ describe('e2e tests', () => {
     });
   });
   describe('when user adds an item variant to the cart', () => {
-    it('renders that item variant in the cart with details and buttons', async () => {
+    test('user sees that item variant in the cart with details and Add/Remove buttons', async () => {
       const itemBrand = 'Michael Belhadi';
       const variantPrice = '£30.00';
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
@@ -130,7 +130,7 @@ describe('e2e tests', () => {
       expect(button1).toHaveTextContent('-');
       expect(button2).toHaveTextContent('+');
     });
-    it('renders multiples of that item variant in the cart', async () => {
+    test('user can see multiples of that item variant in the cart', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         itemTitle,
         itemVariantDesc,
@@ -144,7 +144,7 @@ describe('e2e tests', () => {
         within(cart).getByText(`2 ${itemVariantDesc}`),
       ).toBeInTheDocument();
     });
-    it('updates the cart price', async () => {
+    test('user sees an updated cart price', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         itemTitle,
         itemVariantDesc,
@@ -154,7 +154,7 @@ describe('e2e tests', () => {
 
       expect(screen.getByText('Total: £30.00')).toBeInTheDocument();
     });
-    it('renders a button to add more of an item variant to the cart', async () => {
+    test('user can increase the quantity of an item in the cart', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         itemTitle,
         itemVariantDesc,
@@ -175,9 +175,9 @@ describe('e2e tests', () => {
       expect(screen.getByText('Total: £60.00')).toBeInTheDocument();
     });
   });
-  describe('when user removes an item variant from the cart', () => {
+  describe('when user decreases the quantity of an item in the cart', () => {
     describe('when the cart contains just 1 of the item variant', () => {
-      it('removes the item variant from the cart and updates the cart price', async () => {
+      test('user sees the cart does not contain the item variant, and that the cart price is updated', async () => {
         const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
           itemTitle,
           itemVariantDesc,
@@ -199,7 +199,7 @@ describe('e2e tests', () => {
       });
     });
     describe('when the cart contains multiples of the item variant', () => {
-      it('keeps the item variant in the cart, updates the item variant quantity and cart price', async () => {
+      test('user sees the cart contains the item variant with reduced quantity, and that the cart price is updated', async () => {
         const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
           itemTitle,
           itemVariantDesc,
@@ -222,8 +222,8 @@ describe('e2e tests', () => {
       });
     });
   });
-  describe('when user clears the cart with one action', () => {
-    it('removes all items and resets the cart price to 0', async () => {
+  describe('when user removes all items from their cart with a single action', () => {
+    test('user sees the cart has no items and its price is 0', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         itemTitle,
         itemVariantDesc,
@@ -250,7 +250,7 @@ describe('e2e tests', () => {
     const lowStockTitle = 'Jungle Art Print Unframed';
     const lowStockVariantDescription = `${lowStockTitle} A3`;
     const lowStockVariantStock = 4;
-    it('disables an item variant\'s "Add to Cart" button if it is already out of stock', async () => {
+    test('user sees the item variant\'s "Add to Cart" button disabled if it is already out of stock', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         outOfStockTitle,
         new RegExp(outOfStockVariantDescription),
@@ -264,7 +264,7 @@ describe('e2e tests', () => {
       );
       expect(variantDescription).toBeNull();
     });
-    it('disables an item variant\'s "Add to Cart" button when it runs out of stock', async () => {
+    test('user sees the item variant\'s "Add to Cart" button disabled after adding all its stock to basket', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
         lowStockVariantDescription,
@@ -280,7 +280,7 @@ describe('e2e tests', () => {
       );
       expect(newCatalogueItem).toHaveTextContent(/\[OUT OF STOCK\]/);
     });
-    it('disables an item variant\'s "Increment" button when it runs out of stock', async () => {
+    test('user sees the item variant\'s "Increment" button disabled after adding all its stock to basket', async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
         lowStockVariantDescription,
@@ -298,7 +298,7 @@ describe('e2e tests', () => {
         .closest('button');
       expect(incrementButton).toBeDisabled();
     });
-    it("re-enables the item variant's Add buttons when it is back in stock", async () => {
+    test("user sees the item variant's buttons re-enabled after removing some of it from the basket", async () => {
       const catalogueItemVariant = await getItemVariantInCatalogueDropdown(
         lowStockTitle,
         lowStockVariantDescription,
